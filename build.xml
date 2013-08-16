@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ////////////////////////////////////////////////////////////////////// -->
+<!-- Copyright (c) 2002 by Naohide Sano, All rights reserved.               -->
+<!--                                                                        -->
+<!-- Written by Naohide Sano                                                -->
+<!--                                                                        -->
+<!-- DirectInput Test                                                       -->
+<!--                                                                        -->
+<!-- @author	Naohide Sano                                                -->
+<!-- @version	0.00	020522	nsano	initial version                     -->
+<!--                                                                        -->
+<!-- ////////////////////////////////////////////////////////////////////// -->
+
+<project default="run" basedir=".">
+
+<property file="../../local.properties" />
+
+<!-- クラスパスの定義 -->
+<path id="project.class.path">
+    <!-- 必要なライブラリを定義する -->
+    <pathelement location="." />
+    <pathelement location="../.." />
+</path>
+
+<path id="boot.class.path">
+  <fileset dir="${dir.windows}/java/packages">
+    <include name="*.ZIP" />
+  </fileset>
+</path>
+
+<!-- ターゲットの定義 -->
+
+<!-- clean -->
+<target name="clean" description="ビルド環境のクリア">
+  <delete>
+   <fileset dir=".">
+    <include name="*.class" />
+   </fileset>
+  </delete>
+</target>
+
+<!-- javac -->
+<target name="compile" description="コンパイル">
+  <javac debug="on" target="1.1">
+    <classpath refid="project.class.path" />
+    <bootclasspath refid="boot.class.path" />
+    <include name="*.java" />
+    <include name="vavi/awt/CheckboxMenuItemGroup.java" />
+    <include name="vavi/awt/event/ActionSupport.java" />
+    <src path="." />
+    <src path="../.." />
+  </javac>
+</target>
+
+<!-- run -->
+<target name="run" depends="compile" description="プログラムの実行">
+  <exec executable="jview">
+    <arg value="-cp"/>
+    <arg value=".;../.."/>
+    <arg value="DirectInputTest"/>
+    <arg value="1"/>
+  </exec>
+</target>
+
+</project>
+
+<!-- -->
