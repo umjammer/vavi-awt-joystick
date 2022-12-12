@@ -5,6 +5,8 @@
 
 # vavi-awt-joystick
 
+<img src="https://user-images.githubusercontent.com/493908/207153859-91ad7707-d1d4-4609-bcdd-9cf992da5eec.png" width="320" />
+
 Provides joystic related clasees.
 
 ## TODO
