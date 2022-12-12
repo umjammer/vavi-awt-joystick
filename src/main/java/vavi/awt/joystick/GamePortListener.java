@@ -1,9 +1,10 @@
-package vavi.awt.joystick;
 /*
  * Copyright (c) 2002 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
+
+package vavi.awt.joystick;
 
 /**
  * The listener interface for the direct input device.
@@ -16,6 +17,7 @@ package vavi.awt.joystick;
 public interface GamePortListener {
 
     /** @deprecated */
+    @Deprecated
     void portChange(GamePortEvent ev);
 
     /** Called when buttons state changed. */

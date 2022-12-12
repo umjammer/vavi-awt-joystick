@@ -1,9 +1,10 @@
-package vavi.awt.joystick;
 /*
  * Copyright (c) 2002 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
+
+package vavi.awt.joystick.impl;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -15,6 +16,10 @@ import java.awt.Toolkit;
 import java.awt.image.ImageObserver;
 import java.io.InputStream;
 import java.util.Properties;
+
+import vavi.awt.joystick.GamePortAdapter;
+import vavi.awt.joystick.GamePortEvent;
+import vavi.awt.joystick.JoySticklet;
 
 
 /**
@@ -28,7 +33,7 @@ public class JoySticklet_2883_1 extends JoySticklet {
     /**
      * position display
      */
-    class Panel3 extends Panel {
+    static class Panel3 extends Panel {
         int px = 50;
         int py = 50;
         {
@@ -39,14 +44,14 @@ public class JoySticklet_2883_1 extends JoySticklet {
             int width = getSize().width;
             int height = getSize().height;
             g.fillRect(width * px / 100 - 5, height * py / 100 - 5, 10, 10);
-	    g.drawString(px + ", " + py, 10, 10);
+            g.drawString(px + ", " + py, 10, 10);
         }
-    };
+    }
 
     /**
      * image panel
      */
-    class Panel2 extends Panel {
+    static class Panel2 extends Panel {
         Image image;
         Panel2(Image image) {
             this.image = image;
@@ -54,7 +59,7 @@ public class JoySticklet_2883_1 extends JoySticklet {
         public void paint(Graphics g) {
             super.paint(g);
             if (image == null || !g.drawImage(image, 0, 0, this))
-	        g.drawString("image N/A", 10, 10);
+                g.drawString("image N/A", 10, 10);
         }
         public boolean imageUpdate(Image img, int infoflags,
                                    int x, int y, int width, int height) {
@@ -65,14 +70,14 @@ public class JoySticklet_2883_1 extends JoySticklet {
                 return true;
             }
         }
-    };
+    }
 
     MediaTracker tracker = new MediaTracker(this);
 
     /**
      * image utility
      */
-    class Image2 {
+    static class Image2 {
         String name;
         int x;
         int y;
@@ -88,16 +93,15 @@ public class JoySticklet_2883_1 extends JoySticklet {
         "r3up", "r3right", "r3down", "r3left",
         "ds", "ds2"
     };
+
     Image2[] images = new Image2[names.length];
 
     {
-        Class c = JoySticklet_2883_1.class;
         try {
             Toolkit t = Toolkit.getDefaultToolkit();
 
             Properties props = new Properties();
-            InputStream is =
-                c.getResourceAsStream("JoySticklet_2883_1.properties");
+            InputStream is = JoySticklet_2883_1.class.getResourceAsStream("JoySticklet_2883_1.properties");
             props.load(is);
 
             for (int i = 0; i < names.length; i++) {
@@ -106,8 +110,7 @@ public class JoySticklet_2883_1 extends JoySticklet {
                 images[i] = new Image2();
                 images[i].name = name;
 
-                Image image =
-                    t.getImage(c.getResource("images/" + name + ".gif"));
+                Image image = t.getImage(JoySticklet_2883_1.class.getResource("images/" + name + ".gif"));
                 images[i].panel = new Panel2(image);
                 tracker.addImage(image, i);
 
@@ -132,7 +135,7 @@ public class JoySticklet_2883_1 extends JoySticklet {
                 images[i].panel.setVisible(false);
             }
         } catch (Exception e) {
-System.err.println(e);
+            throw new IllegalStateException(e);
         }
     }
 
@@ -150,20 +153,20 @@ System.err.println(e);
         this.setLayout(null);
         this.add(images[25].panel);
         images[25].panel.setLocation(24, 16);
-/*
-        Panel panel = new Panel(new GridLayout(4, 2));
-        panel.add(new Label("xPos"));
-        panel.add(xPos);
-        panel.add(new Label("yPos"));
-        panel.add(yPos);
-        panel.add(new Label("rPos"));
-        panel.add(rPos);
-        panel.add(new Label("zPos"));
-        panel.add(zPos);
-        this.add(panel);
-        panel.setSize(200, 160);
-        panel.setLocation(360, 200);
-*/
+
+//        Panel panel = new Panel(new GridLayout(4, 2));
+//        panel.add(new Label("xPos"));
+//        panel.add(xPos);
+//        panel.add(new Label("yPos"));
+//        panel.add(yPos);
+//        panel.add(new Label("rPos"));
+//        panel.add(rPos);
+//        panel.add(new Label("zPos"));
+//        panel.add(zPos);
+//        this.add(panel);
+//        panel.setSize(200, 160);
+//        panel.setLocation(360, 200);
+
         this.add(l3);
         l3.setSize(100, 100);
         l3.setLocation(360, 240);

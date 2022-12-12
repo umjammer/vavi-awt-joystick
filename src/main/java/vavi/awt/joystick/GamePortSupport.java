@@ -1,9 +1,10 @@
-package vavi.awt.joystick;
 /*
  * Copyright (c) 2002 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
+
+package vavi.awt.joystick;
 
 import java.util.Vector;
 
