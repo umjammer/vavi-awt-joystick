@@ -1,9 +1,10 @@
-package vavi.awt.joystick.ms;
 /*
  * Copyright (c) 2002 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
+
+package vavi.awt.joystick.ms;
 
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -124,7 +125,7 @@ public final class GamePort extends GamePortSupport {
         throw new IllegalArgumentException("no device (mid=" + mid + ",pid=" + pid + ")");
     }
 
-    /** Initialize. */
+    /* Initialize. */
     static {
         Vector tmp = new Vector();
 //System.err.println("num:\t" + di.getNumDevs());

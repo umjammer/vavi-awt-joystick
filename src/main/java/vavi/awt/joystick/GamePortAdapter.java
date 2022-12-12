@@ -1,10 +1,10 @@
-package vavi.awt.joystick;
 /*
  * Copyright (c) 2002 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
+package vavi.awt.joystick;
 
 /**
  * The adapter class for the direct input device.
@@ -16,27 +16,27 @@ package vavi.awt.joystick;
  */
 public abstract class GamePortAdapter implements GamePortListener {
 
-    /** @deprecated */
+    @Deprecated
     public void portChange(GamePortEvent ev) {
     }
 
-    /** Called when buttons state changed. */
+    @Override
     public void buttonChange(GamePortEvent ev) {
     }
 
-    /** Called when position state changed. */
+    @Override
     public void positionChange(GamePortEvent ev) {
     }
 
-    /** @deprecated */
+    @Override
     public void buttonClicked(GamePortEvent ev) {
     }
 
-    /** Called when a button pressed. */
+    @Override
     public void buttonPressed(GamePortEvent ev) {
     }
 
-    /** Called when a button released. */
+    @Override
     public void buttonReleased(GamePortEvent ev) {
     }
 }

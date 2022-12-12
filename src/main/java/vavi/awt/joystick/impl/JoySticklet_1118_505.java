@@ -1,9 +1,10 @@
-package vavi.awt.joystick;
 /*
  * Copyright (c) 2002 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
+
+package vavi.awt.joystick.impl;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -11,6 +12,11 @@ import java.awt.Label;
 import java.awt.Panel;
 import java.io.InputStream;
 import java.util.Properties;
+
+import vavi.awt.joystick.GamePortAdapter;
+import vavi.awt.joystick.GamePortEvent;
+import vavi.awt.joystick.GamePortListener;
+import vavi.awt.joystick.JoySticklet;
 
 
 /**
@@ -27,7 +33,7 @@ public class JoySticklet_1118_505 extends JoySticklet {
     private Label down  = new Label();
     private Label left  = new Label();
 
-    private Label b[] = new Label[] {
+    private Label[] b = new Label[] {
         new Label(), new Label(), new Label(),
         new Label(), new Label(), new Label()
     };
@@ -48,13 +54,11 @@ public class JoySticklet_1118_505 extends JoySticklet {
     private static final Color offColor2 = Color.red.darker().darker().darker();
     private static final Color offColor1 = Color.yellow.darker().darker().darker();
 
-    /** */
+    /* */
     {
-        Class c = JoySticklet_1118_505.class;
         try {
             Properties props = new Properties();
-            InputStream is =
-                c.getResourceAsStream("JoySticklet_1118_505.properties");
+            InputStream is = JoySticklet_1118_505.class.getResourceAsStream("JoySticklet_1118_505.properties");
             props.load(is);
 
             rightAction = new ShellCommand(props.getProperty("action.right"));
@@ -68,7 +72,7 @@ public class JoySticklet_1118_505 extends JoySticklet {
             b5Action = new ShellCommand(props.getProperty("action.b5"));
             b6Action = new ShellCommand(props.getProperty("action.b6"));
         } catch (Exception e) {
-System.err.println(e);
+            throw new IllegalStateException(e);
         }
     }
 

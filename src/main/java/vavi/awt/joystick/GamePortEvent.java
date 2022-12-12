@@ -1,11 +1,12 @@
-package vavi.awt.joystick;
 /*
  * Copyright (c) 2002 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-import java.util.*;
+package vavi.awt.joystick;
+
+import java.util.EventObject;
 
 
 /**
@@ -15,6 +16,7 @@ import java.util.*;
  * @version 0.00 020420 nsano initial version <br>
  */
 public class GamePortEvent extends EventObject {
+
     /** Current button number that is pressed. */
     int buttonNumber;
     /**
@@ -24,7 +26,7 @@ public class GamePortEvent extends EventObject {
      * 1 to 32. Each value corresponds to the button that is
      * pressed.
      */
-    int buttons;
+    public int buttons;
     /**
      * Flags that indicate if information returned in this
      * class is valid. Members that do not contain valid
@@ -40,20 +42,20 @@ public class GamePortEvent extends EventObject {
      */
     int pov;
     /** Current position of the rudder, or fourth joystick axis. */
-    int rPos;
+    public int rPos;
     /** Current positions of the fifth joystick axis. */
-    int uPos;
+    public int uPos;
     /** Current positions of the sixth joystick axis. */
-    int vPos;
+    public int vPos;
     /**	Current x-coordinate. */
-    int xPos;
+    public int xPos;
     /**	Current y-coordinate. */
-    int yPos;
+    public int yPos;
     /** Current z coordinate. */
-    int zPos;
+    public int zPos;
 
     /** target button no. */
-    int target;
+    public int target;
 
     /** Creates an event object. */
     public GamePortEvent(Object source) {

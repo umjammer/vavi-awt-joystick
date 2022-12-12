@@ -1,17 +1,19 @@
-package vavi.awt.joystick.ms;
 /*
  * Copyright (c) 2002 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
+package vavi.awt.joystick.ms;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
 
 import com.ms.directX.DirectXConstants;
 import com.ms.directX.JoyInfo;
-
 import vavi.awt.joystick.GamePortEvent;
+import vavi.util.Debug;
 
 
 /**
@@ -110,9 +112,7 @@ public class GamePortActionAdapter implements ActionListener {
             backup.zPos         = ji.zPos        ;
 
         } catch (Exception f) {
-System.err.println(f);
-//f.printStackTrace();
-//System.exit(-1);
+Debug.printStackTrace(Level.FINE, f);
         }
     }
 }

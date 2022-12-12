@@ -23,17 +23,17 @@ import vavi.awt.joystick.ms.GamePort;
 
 /**
  * direct input.
- * 
+ *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 020419 nsano initial version <br>
  */
 public class DirectInputTest {
 
     /**
-     * The main entry point for the application. 
+     * The main entry point for the application.
      *
      * @param args Array of parameters passed to the application
-     * via the command line.
+     *             via the command line.
      */
     public static void main(String[] args) {
         int index = -1;
@@ -58,8 +58,8 @@ public class DirectInputTest {
         GamePort[] gps = GamePort.getGamePorts();
 
         for (int i = 0; i < gps.length; i++) {
-            int    mid  = gps[i].getManufacturerId();
-            int    pid  = gps[i].getProductId();
+            int mid = gps[i].getManufacturerId();
+            int pid = gps[i].getProductId();
             String name = gps[i].getName();
             try {
                 String className = "JoySticklet_" + mid + "_" + pid;
@@ -67,7 +67,7 @@ public class DirectInputTest {
                 JoySticklet jsl = (JoySticklet) clazz.newInstance();
                 cache.put(name, jsl);
             } catch (Exception e) {
-System.err.println(e);
+                System.err.println(e);
             }
         }
 
@@ -89,7 +89,7 @@ System.err.println(e);
             public void actionPerformed(ActionEvent ev) {
                 String name = ((MenuItem) ev.getSource()).getLabel();
                 JoySticklet jsl = (JoySticklet) cache.get(name);
-                if (backup!= null && jsl != backup) {
+                if (backup != null && jsl != backup) {
 //System.err.println(ev.getSource());
                     frame.remove(backup);
                     frame.add(jsl);
