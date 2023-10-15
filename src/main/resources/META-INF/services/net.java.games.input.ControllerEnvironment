@@ -1,0 +1,3 @@
+vavi.awt.joystick.hid4java.Hid4JavaControllerEnvironment
+#vavi.awt.joystick.usb.UsbControllerEnvironment
+#vavi.awt.joystick.ms.DirectInputControllerEnvironment

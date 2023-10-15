@@ -12,10 +12,13 @@ import java.awt.Label;
 import java.awt.Panel;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-import vavi.awt.joystick.GamePortAdapter;
-import vavi.awt.joystick.GamePortEvent;
-import vavi.awt.joystick.GamePortListener;
+import net.java.games.input.Component;
+import net.java.games.input.Event;
+import net.java.games.input.EventQueue;
 import vavi.awt.joystick.JoySticklet;
 
 
@@ -80,7 +83,7 @@ public class JoySticklet_1118_505 extends JoySticklet {
      * 6 ボタン ゲームパッドのジョイスティックレットを構築します．
      */
     public JoySticklet_1118_505() {
-        super(1118, 505);
+        super("Ms:1118:505");
 //System.err.println(buttonNumber);
         setLayout(null);
         setSize(640, 400);
@@ -122,121 +125,119 @@ public class JoySticklet_1118_505 extends JoySticklet {
 
         add(panel);
 
-        addGamePortListener(stateListener);
-        addGamePortListener(actionListener);
-    }
-
-    /** */
-    GamePortListener stateListener = new GamePortAdapter() {
-        public void buttonChange(GamePortEvent ev) {
+        ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+        ses.scheduleAtFixedRate(() -> {
+            EventQueue queue = getEventQueue();
+//Debug.printf("%04x%n", ev.buttons);
+//Debug.println(StringUtil.toBits(ev.buttons));
+            Event ev = new Event();
+            while (queue.getNextEvent(ev)) {
 //System.err.println(toHex4(ev.buttons));
-            for (int i = 0; i < 6; i++) {
-                if ((ev.buttons & (0x0001 << i)) != 0) {
-                    b[i].setBackground(onColor2);
+
+                for (int i = 0; i < 6; i++) {
+                    if (ev.getComponent().getIdentifier() == Component.Identifier.byName("Button_" + i)) {
+                        if (ev.getValue() != 0) {
+                            b[i].setBackground(onColor2);
+                        } else {
+                            b[i].setBackground(offColor2);
+                        }
+                    }
+                }
+
+                int px = 0;
+                if (ev.getComponent().getIdentifier() ==  Component.Identifier.Axis.X)
+                    px = (int) (ev.getValue() * 100 / 65535);
+                int py = 0;
+                if (ev.getComponent().getIdentifier() ==  Component.Identifier.Axis.Y)
+                    py = (int) (ev.getValue() * 100 / 65535);
+                if (px < 30) {
+                    left.setBackground(onColor1);
                 } else {
-                    b[i].setBackground(offColor2);
+                    left.setBackground(offColor1);
                 }
-            }
-        }
-        public void positionChange(GamePortEvent ev) {
-            int px = ev.xPos * 100 / 65535;
-            int py = ev.yPos * 100 / 65535;
-            if (px < 30) {
-                left .setBackground(onColor1);
-            } else {
-                left .setBackground(offColor1);
-            }
-            if (px > 80) {
-                right.setBackground(onColor1);
-            } else {
-                right.setBackground(offColor1);
-            }
-            if (py < 30) {
-                up  .setBackground(onColor1);
-            } else {
-                up  .setBackground(offColor1);
-            }
-            if (py > 80) {
-                down.setBackground(onColor1);
-            } else {
-                down.setBackground(offColor1);
-            }
-        }
-        public void buttonReleased(GamePortEvent ev) {
-System.err.println(ev.target);
-            switch (ev.target) {
-            case 0:
-                break;
-            }
-        }
-    };
+                if (px > 80) {
+                    right.setBackground(onColor1);
+                } else {
+                    right.setBackground(offColor1);
+                }
+                if (py < 30) {
+                    up.setBackground(onColor1);
+                } else {
+                    up.setBackground(offColor1);
+                }
+                if (py > 80) {
+                    down.setBackground(onColor1);
+                } else {
+                    down.setBackground(offColor1);
+                }
 
-    /** */
-    GamePortListener actionListener = new GamePortAdapter() {
-        private boolean left = false;
-        private boolean right = false;
-        private boolean up = false;
-        private boolean down = false;
+                boolean left = false;
+                boolean right = false;
+                boolean up = false;
+                boolean down = false;
 
-        public void positionChange(GamePortEvent ev) {
-            int px = ev.xPos * 100 / 65535;
-            int py = ev.yPos * 100 / 65535;
-            if (px < 30) {
-                left = true;
-            } else {
-                if (left) {
-                    leftAction.exec();
+                if (ev.getComponent().getIdentifier() ==  Component.Identifier.Axis.X)
+                    px = (int) (ev.getValue() * 100 / 65535);
+                if (ev.getComponent().getIdentifier() ==  Component.Identifier.Axis.Y)
+                    py = (int) (ev.getValue() * 100 / 65535);
+                if (px < 30) {
+                    left = true;
+                } else {
+                    if (left) {
+                        leftAction.exec();
+                    }
+                    left = false;
                 }
-                left = false;
-            }
-            if (px > 80) {
-                right = true;
-            } else {
-                if (right) {
-                    rightAction.exec();
+                if (px > 80) {
+                    right = true;
+                } else {
+                    if (right) {
+                        rightAction.exec();
+                    }
+                    right = false;
                 }
-                right = false;
-            }
-            if (py < 30) {
-                up = true;
-            } else {
-                if (up) {
-                    upAction.exec();
+                if (py < 30) {
+                    up = true;
+                } else {
+                    if (up) {
+                        upAction.exec();
+                    }
+                    up = false;
                 }
-                up = false;
-            }
-            if (py > 80) {
-                down = true;
-            } else {
-                if (down) {
-                    downAction.exec();
+                if (py > 80) {
+                    down = true;
+                } else {
+                    if (down) {
+                        downAction.exec();
+                    }
+                    down = false;
                 }
-                down = false;
+
+//                switch (ev.target) {
+//                case 0:
+//                    b1Action.exec();
+//                    break;
+//                case 1:
+//                    b2Action.exec();
+//                    break;
+//                case 2:
+//                    b3Action.exec();
+//                    break;
+//                case 3:
+//                    b4Action.exec();
+//                    break;
+//                case 4:
+//                    b5Action.exec();
+//                    break;
+//                case 5:
+//                    b6Action.exec();
+//                    break;
+//                }
             }
-        }
-        public void buttonReleased(GamePortEvent ev) {
-            switch (ev.target) {
-            case 0:
-                b1Action.exec();
-                break;
-            case 1:
-                b2Action.exec();
-                break;
-            case 2:
-                b3Action.exec();
-                break;
-            case 3:
-                b4Action.exec();
-                break;
-            case 4:
-                b5Action.exec();
-                break;
-            case 5:
-                b6Action.exec();
-                break;
-            }
-        }
-    };
+        }, 0, 333, TimeUnit.MILLISECONDS);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(ses::shutdown));
+    }
 }
 
 /* */

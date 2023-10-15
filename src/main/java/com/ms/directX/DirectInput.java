@@ -9,6 +9,8 @@ package com.ms.directX;
 /**
  * DirectInput.
  *
+ * TODO use jacob see vavi-util-archive-sandbox:vavi.util.archive.ComArchive class
+ *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2022-12-12 nsano initial version <br>
  */

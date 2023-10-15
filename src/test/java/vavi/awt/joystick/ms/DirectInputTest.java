@@ -4,21 +4,23 @@
  * Programmed by Naohide Sano
  */
 
+package vavi.awt.joystick.ms;
+
 import java.awt.CheckboxMenuItem;
 import java.awt.Frame;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import vavi.awt.CheckboxMenuItemGroup;
 import vavi.awt.joystick.JoySticklet;
-import vavi.awt.joystick.ms.GamePort;
 
 
 /**
@@ -27,6 +29,7 @@ import vavi.awt.joystick.ms.GamePort;
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 020419 nsano initial version <br>
  */
+@EnabledOnOs(OS.WINDOWS)
 public class DirectInputTest {
 
     /**
@@ -46,7 +49,7 @@ public class DirectInputTest {
     /** accessed by inner class */
     Frame frame = new Frame("JoyStick");
     /** Joysticklets, accessed by inner class */
-    Hashtable cache = new Hashtable();
+    Map<String, JoySticklet> cache = new HashMap<>();
     /** accessed by inner class */
     JoySticklet backup;
 
@@ -55,54 +58,47 @@ public class DirectInputTest {
 
         frame.setSize(640, 400);
 
-        GamePort[] gps = GamePort.getGamePorts();
-
-        for (int i = 0; i < gps.length; i++) {
-            int mid = gps[i].getManufacturerId();
-            int pid = gps[i].getProductId();
-            String name = gps[i].getName();
+        Arrays.stream(new DirectInputControllerEnvironment().getControllers())
+                .map(c -> (DirectInputController) c)
+                .forEach(gp -> {
+            int mid = gp.getManufacturerId();
+            int pid = gp.getProductId();
+            String name = gp.getName();
             try {
-                String className = "JoySticklet_" + mid + "_" + pid;
-                Class clazz = Class.forName(className);
-                JoySticklet jsl = (JoySticklet) clazz.newInstance();
+                String className = "vavi.awt.joystick.impl." + "JoySticklet_" + mid + "_" + pid;
+                Class<?> clazz = Class.forName(className);
+                JoySticklet jsl = (JoySticklet) clazz.getDeclaredConstructor().newInstance();
                 cache.put(name, jsl);
             } catch (Exception e) {
-                System.err.println(e);
+                e.printStackTrace();
             }
-        }
+        });
 
         MenuBar mb = new MenuBar();
 
         Menu menu = new Menu("Application");
         MenuItem mi = new MenuItem("Exit");
-        mi.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                System.exit(0);
-            }
-        });
+        mi.addActionListener(ev -> System.exit(0));
         menu.add(mi);
 
         mb.add(menu);
 
         CheckboxMenuItemGroup g = new CheckboxMenuItemGroup();
-        g.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                String name = ((MenuItem) ev.getSource()).getLabel();
-                JoySticklet jsl = (JoySticklet) cache.get(name);
-                if (backup != null && jsl != backup) {
+        g.addActionListener(ev -> {
+            String name = ((MenuItem) ev.getSource()).getLabel();
+            JoySticklet jsl = cache.get(name);
+            if (backup != null && jsl != backup) {
 //System.err.println(ev.getSource());
-                    frame.remove(backup);
-                    frame.add(jsl);
-                    jsl.validate();
-                    backup = jsl;
-                }
+                frame.remove(backup);
+                frame.add(jsl);
+                jsl.validate();
+                backup = jsl;
             }
         });
 
         menu = new Menu("Device");
-        Enumeration e = cache.keys();
-        while (e.hasMoreElements()) {
-            mi = new CheckboxMenuItem((String) e.nextElement());
+        for (Map.Entry<String, JoySticklet> e : cache.entrySet()) {
+            mi = new CheckboxMenuItem(e.getKey());
             g.add((CheckboxMenuItem) mi);
             menu.add(mi);
         }
@@ -110,8 +106,7 @@ public class DirectInputTest {
 
         frame.setMenuBar(mb);
 
-        e = cache.elements();
-        JoySticklet jsl = (JoySticklet) e.nextElement();
+        JoySticklet jsl = cache.values().stream().findFirst().get();
         frame.add(jsl);
         backup = jsl;
 
