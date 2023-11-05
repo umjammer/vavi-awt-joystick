@@ -75,23 +75,29 @@ public final class UsbUtil {
         System.out.println();
     }
 
-    /*
-     * HID descriptor
+    enum Type {
+        Main,
+        Global,
+        Local,
+        reserved
+    }
+
+    /*+
+     * entry point
      */
     public static void dump_report_desc(byte[] b, int l) {
-        int bsize, btag, btype, data = 0xffff, hut = 0xffff;
-        String[] types = {"Main", "Global", "Local", "reserved"};
+        int data = 0xffff, hut = 0xffff;
         String indent = "                            ";
 
         System.out.printf("          Report Descriptor: (length is %d)\n", l);
 outer:
-        for (int  i = 0; i < l; ) {
-            bsize = b[i] & 0x03;
+        for (int i = 0; i < l; ) {
+            int bsize = b[i] & 0x03;
             if (bsize == 3)
                 bsize = 4;
-            btype = (b[i] & 0xff) & (0x03 << 2);
-            btag = (b[i] & 0xff) & ~0x03; // 2 LSB bits encode length
-            System.out.printf("            Item(%-6s): %s, data=", types[btype >> 2], names_reporttag(btag));
+            int btype = ((b[i] & 0xff) & (0x03 << 2)) >> 2;
+            int btag = (b[i] & 0xff) & ~0x03; // 2 LSB bits encode length
+            System.out.printf("            Item(%-6s): %s, data=", Type.values()[btype], names_reporttag(btag));
             if (bsize > 0) {
                 System.out.print(" [ ");
                 data = 0;

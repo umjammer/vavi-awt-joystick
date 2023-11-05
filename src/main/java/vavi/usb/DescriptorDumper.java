@@ -21,7 +21,7 @@ import org.hid4java.HidDevice;
  */
 public class DescriptorDumper {
 
-    private static DescriptorDumper instance = new DescriptorDumper();
+    private static final DescriptorDumper instance = new DescriptorDumper();
 
     private DescriptorDumper() {
     }
@@ -30,7 +30,7 @@ public class DescriptorDumper {
         return instance;
     }
 
-    private static final int DESC_BUF_LEN_FROM_BUF = 0xffffffff;
+    private static final int DESC_BUF_LEN_FROM_BUF = 0xffff_ffff;
 
     /**
      * Descriptor field value type.
@@ -136,6 +136,7 @@ public class DescriptorDumper {
              * Must be a NULL terminated Array of '\0' terminated strings.
              */
             String[] number_strings;
+
             /**
              * Corresponds to type DESC_NUMBER_POSTFIX.
              * <p>
@@ -347,8 +348,7 @@ public class DescriptorDumper {
             int offset,
             int bytes) {
         int align = (width >= bytes * 2) ? width - bytes * 2 : 0;
-        System.out.printf(String.format(" %%%ds0x%%0%dx", align, bytes * 2),
-                "", getNBytes(buf, offset, bytes));
+        System.out.printf(String.format(" %%%ds0x%%0%dx", align, bytes * 2), "", getNBytes(buf, offset, bytes));
     }
 
     /**
@@ -370,7 +370,7 @@ public class DescriptorDumper {
             // Render small numbers as decimal
             System.out.printf(String.format("   %%%dd", width), buf[offset]);
         } else {
-            // Otherwise render as hexadecimal
+            // Otherwise render as hexadecimals
             renderHex(buf, width, offset, bytes);
         }
     }
@@ -378,7 +378,7 @@ public class DescriptorDumper {
     /**
      * Render a field's value to stdout.
      * <p>
-     * The manner of rendering the value is dependant on the value type.
+     * The manner of rendering the value is dependent on the value type.
      *
      * @param dev          LibUSB device handle.
      * @param current      Descriptor definition field to render.
@@ -456,8 +456,7 @@ public class DescriptorDumper {
                 if (((value >> i) & 0x1) == 0) {
                     continue;
                 }
-                System.out.printf(String.format("%%%ds%%s%n", (indent + 1) * 2), "",
-                        current.union.bitmap_strings.strings[i]);
+                System.out.printf(String.format("%%%ds%%s%n", (indent + 1) * 2), "", current.union.bitmap_strings.strings[i]);
             }
             break;
         }
@@ -478,14 +477,12 @@ public class DescriptorDumper {
             break;
         case DESC_TERMINAL_STR:
             renderNumber(buf, size_chars, offset, current_size);
-            System.out.printf(" %s\n", names_audioterminal(
-                    getNBytes(buf, offset, current_size)));
+            System.out.printf(" %s\n", names_audioterminal(getNBytes(buf, offset, current_size)));
             break;
         case DESC_EXTENSION: {
-            int type = (int) get_value_from_field(buf, desc,
-                    current.union.extension.type_field);
+            int type = (int) get_value_from_field(buf, desc, current.union.extension.type_field);
             Desc[] ext_desc = null;
-            int ext_descP = 0;
+            int ext_descP;
 
             /* Lookup the extention descriptor definitions to use, */
             for (ext_descP = 0; ext_descP < current.union.extension.d.desc.length; ext_descP++) {

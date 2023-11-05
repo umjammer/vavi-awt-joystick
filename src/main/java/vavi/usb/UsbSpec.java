@@ -240,8 +240,9 @@ public class UsbSpec {
         new GenericStrTable(0x27, "Cheek"),
     };
 
-    /* HUT usage specs are represented as:
-     *	(huttype << 16) + hutus
+    /**
+     * HUT usage specs are represented as:
+     *(huttype << 16) + hutus
      */
     static GenericStrTable[] hutus = {
         new GenericStrTable((0x01 << 16) + 0x000, "Undefined"),
