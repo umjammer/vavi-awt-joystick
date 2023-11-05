@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.awt.joystick.impl;
+package vavi.awt.joystick.joysticklet;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -19,17 +19,17 @@ import java.util.concurrent.TimeUnit;
 import net.java.games.input.Component;
 import net.java.games.input.Event;
 import net.java.games.input.EventQueue;
-import vavi.awt.joystick.JoySticklet;
+import vavi.awt.joystick.Joysticklet;
 
 
 /**
- * 6 ボタン ゲームパッド
+ * 6 button unknown gamepad which i have.
  * 
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 020421 nsano initial version <br>
  *          0.10 020914 nsano add command <br>
  */
-public class JoySticklet_1118_505 extends JoySticklet {
+public class JoySticklet_1118_505 extends Joysticklet {
 
     private Label up    = new Label();
     private Label right = new Label();
@@ -80,7 +80,7 @@ public class JoySticklet_1118_505 extends JoySticklet {
     }
 
     /**
-     * 6 ボタン ゲームパッドのジョイスティックレットを構築します．
+     * Construct 6 button gamepad Joysticlet.
      */
     public JoySticklet_1118_505() {
         super("Ms:1118:505");
@@ -135,7 +135,7 @@ public class JoySticklet_1118_505 extends JoySticklet {
 //System.err.println(toHex4(ev.buttons));
 
                 for (int i = 0; i < 6; i++) {
-                    if (ev.getComponent().getIdentifier() == Component.Identifier.byName("Button_" + i)) {
+                    if (ev.getComponent().getIdentifier() == Component.Identifier.Button.valueOf(String.valueOf(i))) {
                         if (ev.getValue() != 0) {
                             b[i].setBackground(onColor2);
                         } else {

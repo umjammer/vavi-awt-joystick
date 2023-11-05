@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.awt.joystick.impl;
+package vavi.awt.joystick.joysticklet;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 import net.java.games.input.Component;
 import net.java.games.input.Event;
 import net.java.games.input.EventQueue;
-import vavi.awt.joystick.JoySticklet;
+import vavi.awt.joystick.Joysticklet;
 
 
 /**
@@ -32,7 +32,7 @@ import vavi.awt.joystick.JoySticklet;
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 020421 nsano initial version <br>
  */
-public class JoySticklet_2883_1 extends JoySticklet {
+public class JoySticklet_2883_1 extends Joysticklet {
 
     /**
      * position display

@@ -22,7 +22,7 @@ import net.java.games.input.EventQueue;
  * @version 0.00 020421 nsano initial version <br>
  *          0.10 020914 nsano add command class <br>
  */
-public abstract class JoySticklet extends Panel {
+public abstract class Joysticklet extends Panel {
 
     /** */
     private final Controller controller;
@@ -31,7 +31,7 @@ public abstract class JoySticklet extends Panel {
      * @param name controller mame
      * @throws IllegalStateException no such controller
      */
-    protected JoySticklet(String name) {
+    protected Joysticklet(String name) {
         Optional<Controller> oc = Arrays.stream(ControllerEnvironment.getDefaultEnvironment().getControllers())
                 .filter(c -> c.getName().equals(name))
                 .findFirst();
