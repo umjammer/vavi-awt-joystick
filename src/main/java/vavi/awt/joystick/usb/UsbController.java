@@ -26,7 +26,7 @@ import vavi.util.Debug;
 
 
 /**
- * Hid4javaController.
+ * Hid4JavaController.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-09-18 nsano initial version <br>
@@ -79,8 +79,6 @@ Debug.println("OUT: " + endpointOut);
         pipeOut = endpointOut.getUsbPipe();
         pipeIn = endpointIn.getUsbPipe();
 
-        start();
-
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }
 
@@ -126,10 +124,9 @@ Debug.println("OUT: " + endpointOut);
     private UsbPipe pipeIn;
     private UsbPipe pipeOut;
 
-    /**
-     * Starts the game port polling.
-     */
-    private synchronized void start() {
+    @Override
+    public synchronized void open() {
+        // Starts the game port polling.
         try {
             this.usbInterface.claim(usbInterface -> true);
             this.pipeIn.open();
@@ -139,10 +136,9 @@ Debug.println("OUT: " + endpointOut);
         }
     }
 
-    /**
-     * Stops the game port polling.
-     */
-    private synchronized void close() {
+    @Override
+    public synchronized void close() {
+        // Stops the game port polling.
         try {
             this.pipeIn.close();
             this.pipeOut.close();
