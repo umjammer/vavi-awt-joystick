@@ -18,6 +18,7 @@ import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.Event;
 import net.java.games.input.Rumbler;
+import net.java.games.input.usb.HidController;
 import vavi.util.Debug;
 
 
@@ -27,7 +28,7 @@ import vavi.util.Debug;
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 020422 nsano initial version <br>
  */
-public class DirectInputController extends AbstractController {
+public class DirectInputController extends AbstractController implements HidController {
 
     /**
      * Protected constructor for a controller containing the specified
@@ -71,12 +72,12 @@ public class DirectInputController extends AbstractController {
     /** The device manufacturer id */
     private int mid;
 
-    /** Returns device manufacturer id */
-    public int getManufacturerId() {
+    @Override
+    public int getVendorId() {
         return mid;
     }
 
-    /** Returns device product id */
+    @Override
     public int getProductId() {
         return pid;
     }
@@ -112,13 +113,13 @@ public class DirectInputController extends AbstractController {
                     if ((backup.buttons & (0x0001 << i)) == 0 &&
                             (joyInfo.buttons & (0x0001 << i)) != 0) {
                         Event event = new Event();
-                        event.set(getComponent(Component.Identifier.byName("Button_" + i)), 0, System.nanoTime());
+                        event.set(getComponent(Component.Identifier.Button.valueOf(String.valueOf(i))), 0, System.nanoTime());
                         events.add(event);
                     }
                     else if ((backup.buttons & (0x0001 << i)) != 0 &&
                             (joyInfo.buttons & (0x0001 << i)) == 0) {
                         Event event = new Event();
-                        event.set(getComponent(Component.Identifier.byName("Button_" + i)), 0, System.nanoTime());
+                        event.set(getComponent(Component.Identifier.Button.valueOf(String.valueOf(i))), 0, System.nanoTime());
                         events.add(event);
                     }
                 }

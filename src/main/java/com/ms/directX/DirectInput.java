@@ -6,6 +6,7 @@
 
 package com.ms.directX;
 
+
 /**
  * DirectInput.
  *

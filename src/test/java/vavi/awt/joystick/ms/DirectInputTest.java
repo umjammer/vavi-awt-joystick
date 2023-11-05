@@ -20,7 +20,7 @@ import java.util.Map;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import vavi.awt.CheckboxMenuItemGroup;
-import vavi.awt.joystick.JoySticklet;
+import vavi.awt.joystick.Joysticklet;
 
 
 /**
@@ -49,9 +49,9 @@ public class DirectInputTest {
     /** accessed by inner class */
     Frame frame = new Frame("JoyStick");
     /** Joysticklets, accessed by inner class */
-    Map<String, JoySticklet> cache = new HashMap<>();
+    Map<String, Joysticklet> cache = new HashMap<>();
     /** accessed by inner class */
-    JoySticklet backup;
+    Joysticklet backup;
 
     /** */
     DirectInputTest(int index) {
@@ -61,13 +61,13 @@ public class DirectInputTest {
         Arrays.stream(new DirectInputControllerEnvironment().getControllers())
                 .map(c -> (DirectInputController) c)
                 .forEach(gp -> {
-            int mid = gp.getManufacturerId();
+            int mid = gp.getVendorId();
             int pid = gp.getProductId();
             String name = gp.getName();
             try {
-                String className = "vavi.awt.joystick.impl." + "JoySticklet_" + mid + "_" + pid;
+                String className = "vavi.awt.joystick.joysticklet." + "JoySticklet_" + mid + "_" + pid;
                 Class<?> clazz = Class.forName(className);
-                JoySticklet jsl = (JoySticklet) clazz.getDeclaredConstructor().newInstance();
+                Joysticklet jsl = (Joysticklet) clazz.getDeclaredConstructor().newInstance();
                 cache.put(name, jsl);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -86,7 +86,7 @@ public class DirectInputTest {
         CheckboxMenuItemGroup g = new CheckboxMenuItemGroup();
         g.addActionListener(ev -> {
             String name = ((MenuItem) ev.getSource()).getLabel();
-            JoySticklet jsl = cache.get(name);
+            Joysticklet jsl = cache.get(name);
             if (backup != null && jsl != backup) {
 //System.err.println(ev.getSource());
                 frame.remove(backup);
@@ -97,7 +97,7 @@ public class DirectInputTest {
         });
 
         menu = new Menu("Device");
-        for (Map.Entry<String, JoySticklet> e : cache.entrySet()) {
+        for (Map.Entry<String, Joysticklet> e : cache.entrySet()) {
             mi = new CheckboxMenuItem(e.getKey());
             g.add((CheckboxMenuItem) mi);
             menu.add(mi);
@@ -106,7 +106,7 @@ public class DirectInputTest {
 
         frame.setMenuBar(mb);
 
-        JoySticklet jsl = cache.values().stream().findFirst().get();
+        Joysticklet jsl = cache.values().stream().findFirst().get();
         frame.add(jsl);
         backup = jsl;
 

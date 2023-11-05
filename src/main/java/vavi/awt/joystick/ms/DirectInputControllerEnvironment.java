@@ -193,7 +193,7 @@ Debug.printStackTrace(e);
 
     public Controller getController(int mid, int pid) {
         for (DirectInputController controller : controllers) {
-            if (controller.getManufacturerId() == mid && controller.getProductId() == pid) {
+            if (controller.getVendorId() == mid && controller.getProductId() == pid) {
                 return controller;
             }
         }
