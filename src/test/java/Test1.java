@@ -6,8 +6,8 @@
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicReference;
 
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
@@ -25,8 +25,8 @@ import org.lwjgl.glfw.GLFW;
 import purejavahidapi.HidDevice;
 import purejavahidapi.HidDeviceInfo;
 import purejavahidapi.PureJavaHidApi;
+import vavi.awt.joystick.hid4java.Hid4JavaController;
 import vavi.awt.joystick.hid4java.Hid4JavaControllerEnvironment;
-import vavi.awt.joystick.hid4java.Hid4javaController;
 import vavi.awt.joystick.usb.UsbControllerEnvironment;
 import vavi.hid.parser.HidParser;
 import vavi.util.Debug;
@@ -44,11 +44,6 @@ import vavi.util.properties.annotation.PropsEntity;
 @EnabledIf("localPropertiesExists")
 @PropsEntity(url = "file:local.properties")
 public class Test1 {
-
-    static {
-        // use brew but not in hid4java
-        System.setProperty("jna.library.path", "/opt/homebrew/lib");
-    }
 
     static boolean localPropertiesExists() {
         return Files.exists(Paths.get("local.properties"));
@@ -100,23 +95,19 @@ Debug.println(jid);
 
 Debug.printf("device '%s' ----", device.getHidDeviceInfo().getProductString());
         byte[] data = new byte[132];
-        data[0] = 1;
-        int len = device.getFeatureReport(data, data.length);
+        int len = device.getFeatureReport(2, data, data.length);
 Debug.printf("getFeatureReport: len: %d", len);
         if (len > 0) {
-Debug.printf("getFeatureReport:%n%s", StringUtil.getDump(data));
+Debug.printf("getFeatureReport:%n%s", StringUtil.getDump(data, len));
             HidParser hidParser = new HidParser();
-            byte[] data2 = new byte[131];
-            System.arraycopy(data, 1, data2, 0, len);
-            hidParser.parse(data2, len);
+            hidParser.parse(data, len);
         }
     }
 
     @Test
+    @DisplayName("hid4java spi directly")
     void test3() throws Exception {
         CountDownLatch cdl = new CountDownLatch(1);
-
-        AtomicReference<Controller> controller = new AtomicReference<>();
 
         ControllerEnvironment ce = new Hid4JavaControllerEnvironment();
         ce.addControllerListener(new ControllerListener() {
@@ -128,64 +119,90 @@ Debug.println("➖ controllerRemoved: " + ev.getController());
             @Override
             public void controllerAdded(ControllerEvent ev) {
 Debug.println("➕ controllerAdded: " + ev.getController());
-                Controller c = ev.getController();
-                if (c instanceof Hid4javaController hidc) {
-                    if (hidc.getManufacturerId() == vendorId && hidc.getProductId() == productId) {
-Debug.println(hidc.getName() + " found.");
-                        controller.set(c);
-                        cdl.countDown();
-                    }
-                }
             }
         });
 
-        cdl.await();
+        Hid4JavaController controller = Arrays.stream(ce.getControllers())
+                .filter(c -> c instanceof Hid4JavaController)
+                .map(c -> (Hid4JavaController) c)
+                .filter(c -> c.getVendorId() == vendorId && c.getProductId() == productId)
+                .findFirst().get();
 
-        /* Remember to poll each one */
-        controller.get().poll();
+        while (true) {
 
-        /* Get the controllers event queue */
-        EventQueue queue = controller.get().getEventQueue();
+            /* Remember to poll each one */
+            controller.poll();
 
-        /* Create an event object for the underlying plugin to populate */
-        Event event = new Event();
+            /* Get the controllers event queue */
+            EventQueue queue = controller.getEventQueue();
 
-        /* For each object in the queue */
-        while (queue.getNextEvent(event)) {
+            /* Create an event object for the underlying plugin to populate */
+            Event event = new Event();
 
-            /*
-             * Create a string buffer and put in it, the controller name,
-             * the time stamp of the event, the name of the component
-             * that changed and the new value.
-             *
-             * Note that the timestamp is a relative thing, not
-             * absolute, we can tell what order events happened in
-             * across controllers this way. We can not use it to tell
-             * exactly *when* an event happened just the order.
-             */
-            StringBuilder sb = new StringBuilder(controller.get().getName());
-            sb.append(" at ");
-            sb.append(event.getNanos()).append(", ");
-            Component comp = event.getComponent();
-            sb.append(comp.getName()).append(" changed to ");
-            float value = event.getValue();
+            /* For each object in the queue */
+            while (queue.getNextEvent(event)) {
 
-            /*
-             * Check the type of the component and display an
-             * appropriate value
-             */
-            if (comp.isAnalog()) {
-                sb.append(value);
-            } else {
-                if (value == 1.0f) {
-                    sb.append("On");
+                /*
+                 * Create a string buffer and put in it, the controller name,
+                 * the time stamp of the event, the name of the component
+                 * that changed and the new value.
+                 *
+                 * Note that the timestamp is a relative thing, not
+                 * absolute, we can tell what order events happened in
+                 * across controllers this way. We can not use it to tell
+                 * exactly *when* an event happened just the order.
+                 */
+                StringBuilder sb = new StringBuilder(controller.getName());
+                sb.append(" at ");
+                sb.append(event.getNanos()).append(", ");
+                Component comp = event.getComponent();
+                sb.append(comp.getName()).append(" changed to ");
+                float value = event.getValue();
+
+                /*
+                 * Check the type of the component and display an
+                 * appropriate value
+                 */
+                if (comp.isAnalog()) {
+                    sb.append(value);
                 } else {
-                    sb.append("Off");
+                    if (value == 1.0f) {
+                        sb.append("On");
+                    } else {
+                        sb.append("Off");
+                    }
                 }
+                System.out.println(sb);
             }
-            System.out.println(sb);
-        }
 
-        Thread.sleep(10000);
+            Thread.sleep(20);
+        }
+    }
+
+    @Test
+    @DisplayName("hid4java spi directly")
+    void test5() throws Exception {
+        CountDownLatch cdl = new CountDownLatch(1);
+
+        ControllerEnvironment ce = new Hid4JavaControllerEnvironment();
+        ce.addControllerListener(new ControllerListener() {
+            @Override
+            public void controllerRemoved(ControllerEvent ev) {
+Debug.println("➖ controllerRemoved: " + ev.getController());
+            }
+
+            @Override
+            public void controllerAdded(ControllerEvent ev) {
+Debug.println("➕ controllerAdded: " + ev.getController());
+            }
+        });
+
+        Hid4JavaController controller = Arrays.stream(ce.getControllers())
+                .filter(c -> c instanceof Hid4JavaController)
+                .map(c -> (Hid4JavaController) c)
+                .filter(c -> c.getVendorId() == vendorId && c.getProductId() == productId)
+                .findFirst().get();
+
+Debug.println("controller: " + controller);
     }
 }

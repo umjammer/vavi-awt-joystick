@@ -47,7 +47,7 @@ public abstract class BaseExample implements HidServicesListener {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
-    public void printPlatform() {
+    public static void printPlatform() {
 
         // System info to assist with library detection
         System.out.println("Platform architecture: " + Platform.ARCH);
@@ -56,12 +56,12 @@ public abstract class BaseExample implements HidServicesListener {
 
     }
 
-    public void waitAndShutdown(HidServices hidServices) {
+    public static void waitAndShutdown(HidServices hidServices, int wait) {
 
-        System.out.printf(ANSI_YELLOW + "Waiting 30s to demonstrate attach/detach handling. Watch for slow response after write if configured.%n" + ANSI_RESET);
+        System.out.printf(ANSI_YELLOW + "Waiting " + wait + "s to demonstrate attach/detach handling. Watch for slow response after write if configured.%n" + ANSI_RESET);
 
         // Stop the main thread to demonstrate attach and detach events
-        sleepNoInterruption();
+        sleepNoInterruption(wait);
 
         // Shut down and rely on auto-shutdown hook to clear HidApi resources
         System.out.printf(ANSI_YELLOW + "Triggering shutdown...%n" + ANSI_RESET);
@@ -72,10 +72,10 @@ public abstract class BaseExample implements HidServicesListener {
      * Invokes {@code unit.}{@link TimeUnit#sleep(long) sleep(sleepFor)}
      * uninterruptibly.
      */
-    public static void sleepNoInterruption() {
+    public static void sleepNoInterruption(int wait) {
         boolean interrupted = false;
         try {
-            long remainingNanos = TimeUnit.SECONDS.toNanos(30);
+            long remainingNanos = TimeUnit.SECONDS.toNanos(wait);
             long end = System.nanoTime() + remainingNanos;
             while (true) {
                 try {
