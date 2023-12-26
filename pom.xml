@@ -2,28 +2,42 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>vavi</groupId>
-  <artifactId>vavi-util-joystick</artifactId>
-  <version>0.0.1</version>
+  <artifactId>vavi-awt-joystick</artifactId>
+  <version>0.0.2</version>
+
+  <properties>
+    <lwjgl.version>3.3.2</lwjgl.version>
+  </properties>
+
+  <profiles>
+    <profile><id>lwjgl-natives-linux-amd64</id><activation><os><family>unix</family><arch>amd64</arch></os></activation><properties><lwjgl.natives>natives-linux</lwjgl.natives></properties></profile>
+    <profile><id>lwjgl-natives-linux-aarch64</id><activation><os><family>unix</family><arch>aarch64</arch></os></activation><properties><lwjgl.natives>natives-linux-arm64</lwjgl.natives></properties></profile>
+    <profile><id>lwjgl-natives-linux-arm</id><activation><os><family>unix</family><arch>arm</arch></os></activation><properties><lwjgl.natives>natives-linux-arm32</lwjgl.natives></properties></profile>
+    <profile><id>lwjgl-natives-linux-arm32</id><activation><os><family>unix</family><arch>arm32</arch></os></activation><properties><lwjgl.natives>natives-linux-arm32</lwjgl.natives></properties></profile>
+    <profile><id>lwjgl-natives-macos-x86_64</id><activation><os><family>mac</family><arch>x86_64</arch></os></activation><properties><lwjgl.natives>natives-macos</lwjgl.natives></properties></profile>
+    <profile><id>lwjgl-natives-macos-aarch64</id><activation><os><family>mac</family><arch>aarch64</arch></os></activation><properties><lwjgl.natives>natives-macos-arm64</lwjgl.natives></properties></profile>
+    <profile><id>lwjgl-natives-windows-amd64</id><activation><os><family>windows</family><arch>amd64</arch></os></activation><properties><lwjgl.natives>natives-windows</lwjgl.natives></properties></profile>
+    <profile><id>lwjgl-natives-windows-x86</id><activation><os><family>windows</family><arch>x86</arch></os></activation><properties><lwjgl.natives>natives-windows-x86</lwjgl.natives></properties></profile>
+  </profiles>
 
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
+        <version>3.11.0</version>
         <configuration>
-          <source>8</source>
-          <target>8</target>
-          <encoding>UTF-8</encoding>
+          <release>17</release>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M7</version>
+        <version>3.0.0</version>
         <configuration>
           <argLine>
             -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
+            -Djna.library.path=/opt/homebrew/lib
           </argLine>
           <trimStackTrace>false</trimStackTrace>
         </configuration>
@@ -43,9 +57,16 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.9.1</version>
+        <version>5.10.0</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.lwjgl</groupId>
+        <artifactId>lwjgl-bom</artifactId>
+        <version>${lwjgl.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -54,18 +75,67 @@
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
-      <version>1.1.8</version>
+      <version>1.1.9</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.umjammer.jinput</groupId> <!-- net.java.jinput / com.github.umjammer.jinput -->
+      <artifactId>coreapi</artifactId>
+      <version>2.0.12v</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.usb4java</groupId>
+      <artifactId>usb4java-javax</artifactId>
+      <version>1.3.0</version>
+    </dependency>
+    <dependency> <!-- usb4java not contains native library for darwin-aarch64 -->
+      <groupId>io.github.dsheirer</groupId>
+      <artifactId>libusb4java-darwin-aarch64</artifactId>
+      <version>1.3.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.umjammer</groupId> <!-- org.hid4java / com.github.umjammer -->
+      <artifactId>hid4java</artifactId>
+      <version>0.14.3v</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.umjammer</groupId> <!-- purejavahidapi / com.github.umjammer -->
+      <artifactId>purejavahidapi</artifactId>
+      <version>0.0.13v</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.github.umjammer</groupId>
-      <artifactId>vavi-util-serdes</artifactId>
-      <version>1.0.3</version>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl</artifactId>
+      <classifier>${lwjgl.natives}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-glfw</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-glfw</artifactId>
+      <classifier>${lwjgl.natives}</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>net.sf.jacob-project</groupId>
+      <artifactId>jacob</artifactId>
+      <version>1.14.3</version>
     </dependency>
 
     <dependency>
       <groupId>com.formdev</groupId>
       <artifactId>flatlaf</artifactId>
-      <version>2.6</version>
+      <version>3.0</version>
       <scope>runtime</scope>
     </dependency>
 
@@ -90,6 +160,12 @@
       <artifactId>vavi-awt</artifactId>
       <version>1.0.6</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>vavi-commons-sandbox</artifactId>
+          <groupId>com.github.umjammer</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 </project>

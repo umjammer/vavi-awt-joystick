@@ -7,9 +7,11 @@
 package vavi.awt.joystick;
 
 import java.awt.Panel;
+import java.util.Arrays;
+import java.util.Optional;
 
-import vavi.awt.joystick.GamePortListener;
-import vavi.awt.joystick.ms.GamePort;
+import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
 
 
 /**
@@ -19,23 +21,24 @@ import vavi.awt.joystick.ms.GamePort;
  * @version 0.00 020421 nsano initial version <br>
  *          0.10 020914 nsano add command class <br>
  */
-public abstract class JoySticklet extends Panel {
+public abstract class Joysticklet extends Panel {
 
     /** */
-    private GamePort gp;
+    protected final Controller controller;
 
     /**
-     * @param mid
-     * @param pid
-     * @throws IllegalStateException 対応するデバイスがない場合
+     * @param name controller mame
+     * @throws IllegalStateException no such controller
      */
-    protected JoySticklet(int mid, int pid) {
-        this.gp = GamePort.getGamePort(mid, pid);
-    }
-
-    /** */
-    protected void addGamePortListener(GamePortListener l) {
-        gp.addGamePortListener(l);
+    protected Joysticklet(String name) {
+        Optional<Controller> oc = Arrays.stream(ControllerEnvironment.getDefaultEnvironment().getControllers())
+                .filter(c -> c.getName().equals(name))
+                .findFirst();
+        if (oc.isPresent()) {
+            controller = oc.get();
+        } else {
+            throw new IllegalStateException(name);
+        }
     }
 
     //-------------------------------------------------------------------------
@@ -46,13 +49,13 @@ public abstract class JoySticklet extends Panel {
     }
 
     /** */
-    protected class Command implements Executable {
+    protected static class Command implements Executable {
         public void exec() {
         }
     }
 
     /** */
-    protected class ShellCommand extends Command {
+    protected static class ShellCommand extends Command {
         private String commandLine;
         public ShellCommand(String commandLine) {
             this.commandLine = commandLine;
@@ -60,7 +63,7 @@ System.err.println(this.commandLine);
         }
         public void exec() {
             try {
-                Runtime.getRuntime().exec(commandLine);
+                Runtime.getRuntime().exec(commandLine.split("\\s+"));
             } catch (Exception e) {
 System.err.println(e);
             }
