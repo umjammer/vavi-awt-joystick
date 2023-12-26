@@ -125,13 +125,11 @@ public class JoySticklet_1118_505 extends Joysticklet {
 
         add(panel);
 
-        ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
-        ses.scheduleAtFixedRate(() -> {
-            EventQueue queue = getEventQueue();
+        Event ev = new Event();
+        controller.addInputEventListener(e -> {
 //Debug.printf("%04x%n", ev.buttons);
 //Debug.println(StringUtil.toBits(ev.buttons));
-            Event ev = new Event();
-            while (queue.getNextEvent(ev)) {
+            while (e.getNextEvent(ev)) {
 //System.err.println(toHex4(ev.buttons));
 
                 for (int i = 0; i < 6; i++) {
@@ -234,9 +232,7 @@ public class JoySticklet_1118_505 extends Joysticklet {
 //                    break;
 //                }
             }
-        }, 0, 333, TimeUnit.MILLISECONDS);
-
-        Runtime.getRuntime().addShutdownHook(new Thread(ses::shutdown));
+        });
     }
 }
 

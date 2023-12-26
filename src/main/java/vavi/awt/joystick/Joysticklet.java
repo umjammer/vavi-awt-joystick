@@ -25,7 +25,7 @@ import net.java.games.input.EventQueue;
 public abstract class Joysticklet extends Panel {
 
     /** */
-    private final Controller controller;
+    protected final Controller controller;
 
     /**
      * @param name controller mame
@@ -40,11 +40,6 @@ public abstract class Joysticklet extends Panel {
         } else {
             throw new IllegalStateException(name);
         }
-    }
-
-    /** */
-    protected EventQueue getEventQueue() {
-        return controller.getEventQueue();
     }
 
     //-------------------------------------------------------------------------

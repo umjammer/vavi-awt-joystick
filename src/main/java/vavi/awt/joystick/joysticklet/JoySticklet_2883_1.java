@@ -187,13 +187,11 @@ public class JoySticklet_2883_1 extends Joysticklet {
         r3.setSize(100, 100);
         r3.setLocation(480, 240);
 
-        ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
-        ses.scheduleAtFixedRate(() -> {
-            EventQueue queue = getEventQueue();
+        Event ev = new Event();
+        controller.addInputEventListener(e -> {
 //Debug.printf("%04x%n", ev.buttons);
 //Debug.println(StringUtil.toBits(ev.buttons));
-            Event ev = new Event();
-            while (queue.getNextEvent(ev)) {
+            while (e.getNextEvent(ev)) {
                 if (ev.getComponent().getIdentifier() == Component.Identifier.Button._0)
                     images[0].panel.setVisible(ev.getValue() != 0); // △
                 if (ev.getComponent().getIdentifier() == Component.Identifier.Button._1)
@@ -258,9 +256,7 @@ public class JoySticklet_2883_1 extends Joysticklet {
                 images[22].panel.setVisible(r3.py > 54); // ↓
                 images[23].panel.setVisible(r3.px < 46); // ←
             }
-        }, 0, 333, TimeUnit.MILLISECONDS);
-
-        Runtime.getRuntime().addShutdownHook(new Thread(ses::shutdown));
+        });
     }
 }
 
