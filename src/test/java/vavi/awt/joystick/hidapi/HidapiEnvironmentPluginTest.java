@@ -12,16 +12,16 @@ import org.junit.jupiter.api.Test;
 
 
 /**
- * HidapiControllerEnvironmentTest.
+ * HidapiEnvironmentPluginTest.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-10-03 nsano initial version <br>
  */
-class HidapiControllerEnvironmentTest {
+class HidapiEnvironmentPluginTest {
 
     @Test
     void test1() throws Exception {
-        HidapiControllerEnvironment environment = new HidapiControllerEnvironment();
+        HidapiEnvironmentPlugin environment = new HidapiEnvironmentPlugin();
         Arrays.stream(environment.getControllers()).forEach(System.err::println);
     }
 }
