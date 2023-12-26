@@ -24,10 +24,10 @@ import vavi.util.Debug;
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 230919 nsano initial version <br>
  */
-public final class UsbControllerEnvironment extends ControllerEnvironment {
+public final class UsbEnvironmentPlugin extends ControllerEnvironment {
 
     /** */
-    public UsbControllerEnvironment() {
+    public UsbEnvironmentPlugin() {
         try {
             UsbHub hub = UsbHostManager.getUsbServices().getRootUsbHub();
 

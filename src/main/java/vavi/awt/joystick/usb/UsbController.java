@@ -21,6 +21,7 @@ import net.java.games.input.AbstractController;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.Event;
+import net.java.games.input.PollingController;
 import net.java.games.input.Rumbler;
 import vavi.util.Debug;
 
@@ -31,7 +32,7 @@ import vavi.util.Debug;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-09-18 nsano initial version <br>
  */
-public abstract class UsbController extends AbstractController {
+public abstract class UsbController extends PollingController {
 
     private static String getMString(UsbDevice device, int mid, int pid) {
         try {
