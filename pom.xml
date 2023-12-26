@@ -57,7 +57,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.9.3</version>
+        <version>5.10.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -77,10 +77,11 @@
       <artifactId>vavi-commons</artifactId>
       <version>1.1.9</version>
     </dependency>
+
     <dependency>
-      <groupId>vavi</groupId>
-      <artifactId>vavi-util-serdes</artifactId>
-      <version>1.0.4-SNAPSHOT</version>
+      <groupId>com.github.umjammer.jinput</groupId> <!-- net.java.jinput / com.github.umjammer.jinput -->
+      <artifactId>coreapi</artifactId>
+      <version>2.0.12v</version>
     </dependency>
 
     <dependency>
@@ -95,31 +96,16 @@
     </dependency>
 
     <dependency>
-      <groupId>com.github.gary-rowe</groupId>
+      <groupId>com.github.umjammer</groupId> <!-- org.hid4java / com.github.umjammer -->
       <artifactId>hid4java</artifactId>
-      <version>develop-SNAPSHOT</version>
+      <version>0.14.3v</version>
     </dependency>
 
     <dependency>
-      <groupId>com.github.nyholku</groupId>
+      <groupId>com.github.umjammer</groupId> <!-- purejavahidapi / com.github.umjammer -->
       <artifactId>purejavahidapi</artifactId>
-      <version>f769fcddf6</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>jna</artifactId>
-          <groupId>net.java.dev.jna</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>jna-platform</artifactId>
-          <groupId>net.java.dev.jna</groupId>
-        </exclusion>
-      </exclusions>
+      <version>0.0.13v</version>
     </dependency>
-<dependency>
-  <groupId>net.java.dev.jna</groupId>
-  <artifactId>jna</artifactId>
-  <version>5.13.0</version>
-</dependency>
 
     <dependency>
       <groupId>org.lwjgl</groupId>
@@ -173,13 +159,6 @@
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-awt</artifactId>
       <version>1.0.6</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency> <!-- repl -->
-      <groupId>org.jline</groupId>
-      <artifactId>jline</artifactId>
-      <version>3.23.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

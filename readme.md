@@ -18,8 +18,10 @@
  * ~~first check for a checkbox menu item~~
  * ~~use standard library for Timer~~
  * usb4java doesn't work for dualshock4 on mac ???
- * backport jinput ServiceLoader part into my [jinput](https://github.com/jinput/jinput)
+ * ~~backport jinput ServiceLoader part into my [jinput](https://github.com/jinput/jinput)~~
  * ~~let hid4java use mac framework directly (bypass hidapi)~~
+ * descriptor to components
+   * how can we know descriptor length?
 
 ## References
 
@@ -29,33 +31,42 @@
    * ⚠ 'javax.usb.properties' must be contained in your classpath
  * https://github.com/gary-rowe/hid4java 🎯
    * https://github.com/libusb/hidapi `$ brew install hidapi`
-   * https://fossies.org/linux/SDL2/src/joystick/iphoneos/SDL_mfijoystick.m
-   * [jna version](wip) wip
- * https://github.com/nyholku/purejavahidapi (🥺 but many native unused code in sources) ... 🎯 descriptor parser
- * https://github.com/born2snipe/gamepad4j
- * https://github.com/jinput/jinput
-   * [jna version](https://github.com/umjammer/jinput) wip
- * https://sourceforge.net/projects/gamecontroller/
- * Game Controller framework
+   * [jna version](https://github.com/umjammer/hid4java)
+ * https://github.com/nyholku/purejavahidapi (🥺 but many native unused code in sources!) ... 🎯 descriptor parser
+ * https://github.com/born2snipe/gamepad4j (api + impls)
+ * https://github.com/jinput/jinput by sun (api + impls)
+   * [jna version](https://github.com/umjammer/jinput)
+   * https://sourceforge.net/projects/gamecontroller/ processing (jinput)
+ * Game Controller framework (GCController)
    * https://chromium.googlesource.com/chromium/src/+/HEAD/device/gamepad/game_controller_data_fetcher_mac.mm
- * lwjgl
+   * https://developer.apple.com/documentation/gamecontroller/gcdualshockgamepad gimme a sample
+ * lwjgl (glfw : IOKit(HID))
    * maven template... https://www.lwjgl.org/customize
-   * https://github.com/TeamMidnightDust/MidnightControls
+   * https://github.com/TeamMidnightDust/MidnightControls (glfw)
    * https://github.com/isXander/Controlify
- * https://gamefromscratch.com/libgdx-tutorial-part-14-gamepad-support/ (libgdx)
- * https://github.com/electronstudio/sdl2gdx
- * https://github.com/williamahartman/Jamepad
- * https://github.com/Ryochan7/DS4Windows (c#)
- * https://yukkurigames.com/enjoyable/
+ * sdl2
+   * https://fossies.org/linux/SDL2/src/joystick/iphoneos/SDL_mfijoystick.m
+   * https://github.com/electronstudio/sdl2gdx (sdl2)
+   * https://github.com/williamahartman/Jamepad -> sdl2gdx
+   * https://gamefromscratch.com/libgdx-tutorial-part-14-gamepad-support/ (libgdx)
  * dualshock4
+   * https://www.psdevwiki.com/ps4/DS4-USB
    * http://eleccelerator.com/wiki/index.php?title=DualShock_4
    * https://chromium.googlesource.com/chromium/src/+/HEAD/device/gamepad/dualshock4_controller.cc
    * https://android.googlesource.com/kernel/common.git/+/brillo-m9-release/drivers/hid/hid-sony.c
    * https://github.com/todbot/node-hid-ds4-test/blob/master/node-hid-ds4-test.js rumbling
    * https://stackoverflow.com/a/54541487
    * https://github.com/j0lama/DS4Lib
- * html5 gamepad api
-   * https://hardwaretester.com/gamepad 
+   * https://github.com/Ryochan7/DS4Windows (c#)
+* html5 gamepad api
+   * https://hardwaretester.com/gamepad
+ * https://github.com/gurkenlabs/input4j ... JEP 442
+ * mac app
+   * https://github.com/florianmueller/GamepadMenu
+   * https://github.com/qibinc/JoyMapperSilicon
+   * https://yukkurigames.com/enjoyable/
+ * cui
+   * https://github.com/JetBrains/jediterm
 
 ## Tech Know
 
