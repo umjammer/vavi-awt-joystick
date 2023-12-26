@@ -33,7 +33,6 @@ import org.hid4java.HidDevice;
 import org.hid4java.HidManager;
 import org.hid4java.HidServices;
 import org.hid4java.HidServicesSpecification;
-import vavi.util.Debug;
 
 
 /**
@@ -75,9 +74,7 @@ public class UsbHidEnumerationExample extends BaseExample {
         }
 
         HidDevice device = hidServices.getHidDevice(0x54c, 0x9cc, null);
-Debug.println(device + "\nopen?: " + device.isOpen());
-//        boolean r = dualShock4.open();
-//Debug.println("open dualShock4: " + r);
+        device.open();
 
         device.addInputReportListener(e -> display(e.getReport()));
 

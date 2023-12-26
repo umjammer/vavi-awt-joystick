@@ -15,19 +15,19 @@ import net.java.games.input.ControllerEnvironment;
 import net.java.games.input.ControllerEvent;
 import net.java.games.input.ControllerListener;
 import net.java.games.input.Event;
-import net.java.games.input.EventQueue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.lwjgl.glfw.GLFW;
 import purejavahidapi.HidDevice;
 import purejavahidapi.HidDeviceInfo;
 import purejavahidapi.PureJavaHidApi;
 import vavi.awt.joystick.hid4java.Hid4JavaController;
-import vavi.awt.joystick.hid4java.Hid4JavaControllerEnvironment;
-import vavi.awt.joystick.usb.UsbControllerEnvironment;
+import vavi.awt.joystick.hid4java.Hid4JavaEnvironmentPlugin;
+import vavi.awt.joystick.usb.UsbEnvironmentPlugin;
 import vavi.hid.parser.HidParser;
 import vavi.util.Debug;
 import vavi.util.StringUtil;
@@ -70,7 +70,7 @@ public class Test1 {
     @Test
     @Disabled("java.usb over libusb cannot detect dualshock4")
     void test1() throws Exception {
-        Controller controller = new UsbControllerEnvironment().getController(vendorId, productId);
+        Controller controller = new UsbEnvironmentPlugin().getController(vendorId, productId);
     }
 
     @Test
@@ -86,12 +86,14 @@ Debug.println(jid);
     }
 
     @Test
+    @Disabled("cannot parse")
     @DisplayName("PureJavaHidApi")
     void test4() throws Exception {
         HidDeviceInfo deviceInfo = PureJavaHidApi.enumerateDevices().stream()
                 .filter(d -> d.getVendorId() == 0x54c && d.getProductId() == 0x9cc)
                 .findFirst().get();
         HidDevice device = PureJavaHidApi.openDevice(deviceInfo);
+        device.open();
 
 Debug.printf("device '%s' ----", device.getHidDeviceInfo().getProductString());
         byte[] data = new byte[132];
@@ -106,10 +108,11 @@ Debug.printf("getFeatureReport:%n%s", StringUtil.getDump(data, len));
 
     @Test
     @DisplayName("hid4java spi directly")
+    @EnabledIfSystemProperty(named = "vavi.test", matches = "ide")
     void test3() throws Exception {
         CountDownLatch cdl = new CountDownLatch(1);
 
-        ControllerEnvironment ce = new Hid4JavaControllerEnvironment();
+        ControllerEnvironment ce = new Hid4JavaEnvironmentPlugin();
         ce.addControllerListener(new ControllerListener() {
             @Override
             public void controllerRemoved(ControllerEvent ev) {
@@ -128,42 +131,32 @@ Debug.println("➕ controllerAdded: " + ev.getController());
                 .filter(c -> c.getVendorId() == vendorId && c.getProductId() == productId)
                 .findFirst().get();
 
-        while (true) {
+        // Create an event object for the underlying plugin to populate
+        Event event = new Event();
 
-            /* Remember to poll each one */
-            controller.poll();
+        controller.addInputEventListener(e -> {
 
-            /* Get the controllers event queue */
-            EventQueue queue = controller.getEventQueue();
+            // For each object in the queue
+            while (e.getNextEvent(event)) {
 
-            /* Create an event object for the underlying plugin to populate */
-            Event event = new Event();
-
-            /* For each object in the queue */
-            while (queue.getNextEvent(event)) {
-
-                /*
-                 * Create a string buffer and put in it, the controller name,
-                 * the time stamp of the event, the name of the component
-                 * that changed and the new value.
-                 *
-                 * Note that the timestamp is a relative thing, not
-                 * absolute, we can tell what order events happened in
-                 * across controllers this way. We can not use it to tell
-                 * exactly *when* an event happened just the order.
-                 */
+                // Create a string buffer and put in it, the controller name,
+                // the time stamp of the event, the name of the component
+                // that changed and the new value.
+                //
+                // Note that the timestamp is a relative thing, not
+                // absolute, we can tell what order events happened in
+                // across controllers this way. We can not use it to tell
+                // exactly *when* an event happened just the order.
                 StringBuilder sb = new StringBuilder(controller.getName());
                 sb.append(" at ");
                 sb.append(event.getNanos()).append(", ");
-                Component comp = event.getComponent();
-                sb.append(comp.getName()).append(" changed to ");
+                Component component = event.getComponent();
+                sb.append(component.getName()).append(" changed to ");
                 float value = event.getValue();
 
-                /*
-                 * Check the type of the component and display an
-                 * appropriate value
-                 */
-                if (comp.isAnalog()) {
+                // Check the type of the component and display an
+                // appropriate value
+                if (component.isAnalog()) {
                     sb.append(value);
                 } else {
                     if (value == 1.0f) {
@@ -174,9 +167,11 @@ Debug.println("➕ controllerAdded: " + ev.getController());
                 }
                 System.out.println(sb);
             }
+        });
 
-            Thread.sleep(20);
-        }
+        controller.open();
+
+        new CountDownLatch(1).await();
     }
 
     @Test
@@ -184,7 +179,7 @@ Debug.println("➕ controllerAdded: " + ev.getController());
     void test5() throws Exception {
         CountDownLatch cdl = new CountDownLatch(1);
 
-        ControllerEnvironment ce = new Hid4JavaControllerEnvironment();
+        ControllerEnvironment ce = new Hid4JavaEnvironmentPlugin();
         ce.addControllerListener(new ControllerListener() {
             @Override
             public void controllerRemoved(ControllerEvent ev) {

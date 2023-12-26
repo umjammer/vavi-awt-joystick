@@ -6,6 +6,7 @@
 
 package org.hid4java.examples;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -14,7 +15,9 @@ import org.hid4java.HidDevice;
 import org.hid4java.HidManager;
 import org.hid4java.HidServices;
 import org.hid4java.HidServicesSpecification;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,7 +54,7 @@ public class Hid4JavaTest {
     int vendorId;
     int productId;
 
-    HidServices hidServices;
+    static HidServices hidServices;
 
     @BeforeEach
     void setup() throws Exception {
@@ -61,7 +64,10 @@ public class Hid4JavaTest {
             vendorId = Integer.decode(mid);
             productId = Integer.decode(pid);
         }
+    }
 
+    @BeforeAll
+    static void setupAll() throws Exception {
         HidServicesSpecification hidServicesSpecification = new HidServicesSpecification();
         // Use the v0.7.0 manual start feature to get immediate attach events
         hidServicesSpecification.setAutoStart(false);
@@ -74,9 +80,9 @@ public class Hid4JavaTest {
         hidServices.start();
     }
 
-    @AfterEach
-    void teardown() {
-        hidServices.shutdown();
+    @AfterAll
+    static void teardown() throws Exception {
+//        hidServices.shutdown(); // TODO crash
     }
 
     @Test
@@ -188,7 +194,7 @@ Debug.println("r: " + r);
 
         byte[] d = new byte[4096];
         int r = device.getReportDescriptor(d);
-        Debug.println("r: " + r);
+Debug.println("r: " + r);
 
         HidParser parser = new HidParser();
         Collection root = parser.parse(d, r);
