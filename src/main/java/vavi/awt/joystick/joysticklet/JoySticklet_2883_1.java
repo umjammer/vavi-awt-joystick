@@ -16,13 +16,9 @@ import java.awt.Toolkit;
 import java.awt.image.ImageObserver;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import net.java.games.input.Component;
 import net.java.games.input.Event;
-import net.java.games.input.EventQueue;
 import vavi.awt.joystick.Joysticklet;
 
 

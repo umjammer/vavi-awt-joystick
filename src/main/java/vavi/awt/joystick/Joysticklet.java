@@ -12,7 +12,6 @@ import java.util.Optional;
 
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.EventQueue;
 
 
 /**
