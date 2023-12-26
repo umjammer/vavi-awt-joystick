@@ -17,6 +17,7 @@ import net.java.games.input.AbstractController;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.Event;
+import net.java.games.input.PollingController;
 import net.java.games.input.Rumbler;
 import net.java.games.input.usb.HidController;
 import vavi.util.Debug;
@@ -28,7 +29,7 @@ import vavi.util.Debug;
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 020422 nsano initial version <br>
  */
-public class DirectInputController extends AbstractController implements HidController {
+public class DirectInputController extends PollingController implements HidController {
 
     /**
      * Protected constructor for a controller containing the specified
@@ -51,6 +52,11 @@ public class DirectInputController extends AbstractController implements HidCont
     @Override
     public Type getType() {
         return Type.GAMEPAD;
+    }
+
+    @Override
+    public void output(Report report) throws IOException {
+        // TODO
     }
 
     @Override
@@ -92,7 +98,7 @@ public class DirectInputController extends AbstractController implements HidCont
         joyInfo.flags = DirectXConstants.JOY_RETURNALL;
 
         try {
-            DirectInputControllerEnvironment.getPos(id, joyInfo);
+            DirectInputEnvironmentPlugin.getPos(id, joyInfo);
 /*
             ev.buttonNumber = joyInfo.buttonNumber;
             ev.buttons      = joyInfo.buttons     ;

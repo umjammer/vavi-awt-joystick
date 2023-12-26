@@ -58,7 +58,7 @@ public class DirectInputTest {
 
         frame.setSize(640, 400);
 
-        Arrays.stream(new DirectInputControllerEnvironment().getControllers())
+        Arrays.stream(new DirectInputEnvironmentPlugin().getControllers())
                 .map(c -> (DirectInputController) c)
                 .forEach(gp -> {
             int mid = gp.getVendorId();

@@ -25,13 +25,13 @@ import vavi.util.Debug;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-09-18 nsano initial version <br>
  */
-public final class DirectInputControllerEnvironment extends ControllerEnvironment {
+public final class DirectInputEnvironmentPlugin extends ControllerEnvironment {
 
     /** */
     private final List<DirectInputController> controllers = new ArrayList<>();
 
     /** create all DirectInputController objects */
-    public DirectInputControllerEnvironment() {
+    public DirectInputEnvironmentPlugin() {
         if (directInput == null) {
 //System.err.println("num:\t" + di.getNumDevs());
             try {
