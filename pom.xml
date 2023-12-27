@@ -3,7 +3,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-awt-joystick</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
 
   <properties>
     <lwjgl.version>3.3.2</lwjgl.version>
@@ -98,7 +98,7 @@
     <dependency>
       <groupId>com.github.umjammer</groupId> <!-- org.hid4java / com.github.umjammer -->
       <artifactId>hid4java</artifactId>
-      <version>0.14.3v</version>
+      <version>0.14.4v</version>
     </dependency>
 
     <dependency>

@@ -11,6 +11,7 @@ import net.java.games.input.ControllerEnvironment;
 import net.java.games.input.Event;
 import net.java.games.input.osx.plugin.DualShock4Plugin;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
@@ -66,6 +67,8 @@ class Hid4JavaEnvironmentPluginTest {
 Debug.printf("R: %02x, G: %02x, B: %02x", report.ledRed, report.ledGreen, report.ledBlue);
 
         controller.output(report);
+
+        plugin.close();
     }
 
     @Test

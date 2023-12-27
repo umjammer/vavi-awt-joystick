@@ -6,7 +6,6 @@
 
 package org.hid4java.examples;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -54,7 +53,7 @@ public class Hid4JavaTest {
     int vendorId;
     int productId;
 
-    static HidServices hidServices;
+    HidServices hidServices;
 
     @BeforeEach
     void setup() throws Exception {
@@ -64,10 +63,7 @@ public class Hid4JavaTest {
             vendorId = Integer.decode(mid);
             productId = Integer.decode(pid);
         }
-    }
 
-    @BeforeAll
-    static void setupAll() throws Exception {
         HidServicesSpecification hidServicesSpecification = new HidServicesSpecification();
         // Use the v0.7.0 manual start feature to get immediate attach events
         hidServicesSpecification.setAutoStart(false);
@@ -80,9 +76,9 @@ public class Hid4JavaTest {
         hidServices.start();
     }
 
-    @AfterAll
-    static void teardown() throws Exception {
-//        hidServices.shutdown(); // TODO crash
+    @AfterEach
+    void teardown() throws Exception {
+        hidServices.shutdown();
     }
 
     @Test
