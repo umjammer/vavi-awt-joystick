@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2023 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2024 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.awt.joystick.hid4java;
+package vavi.awt.joystick.hidapi;
 
 import net.java.games.input.AbstractComponent;
 import net.java.games.input.usb.HidComponent;
@@ -15,12 +15,12 @@ import static vavi.hid.parser.HidParser.Feature.RELATIVE;
 
 
 /**
- * Hid4JavaComponent.
+ * HidapiComponent.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
- * @version 0.00 2023-11-06 nsano initial version <br>
+ * @version 0.00 2024-01-17 nsano initial version <br>
  */
-public class Hid4JavaComponent extends AbstractComponent implements HidComponent {
+public class HidapiComponent extends AbstractComponent implements HidComponent {
 
     private final Field field;
 
@@ -30,7 +30,7 @@ public class Hid4JavaComponent extends AbstractComponent implements HidComponent
      * @param name A name for the axis
      * @param field an input report descriptor fragment.
      */
-    protected Hid4JavaComponent(String name, Identifier id, Field field) {
+    protected HidapiComponent(String name, Identifier id, Field field) {
         super(name, id);
         this.field = field;
     }
@@ -39,7 +39,7 @@ public class Hid4JavaComponent extends AbstractComponent implements HidComponent
      * @param offset bits
      * @param size bit length
      */
-    public Hid4JavaComponent(String name, Identifier id, int offset, int size) {
+    public HidapiComponent(String name, Identifier id, int offset, int size) {
         super(name, id);
         this.field = new Field(offset, size);
     }
