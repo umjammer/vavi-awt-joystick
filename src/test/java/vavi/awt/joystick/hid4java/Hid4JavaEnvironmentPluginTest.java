@@ -2,16 +2,13 @@ package vavi.awt.joystick.hid4java;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
 import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
 import net.java.games.input.Event;
 import net.java.games.input.osx.plugin.DualShock4Plugin;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
@@ -57,7 +54,7 @@ class Hid4JavaEnvironmentPluginTest {
         Random random = new Random();
 
         DualShock4Plugin.Report5 report = new DualShock4Plugin.Report5();
-        report.smallRumble = 0;
+        report.smallRumble = 20;
         report.bigRumble = 0;
         report.ledRed = random.nextInt(255);
         report.ledGreen = random.nextInt(255);
