@@ -6,10 +6,17 @@
 
 package vavi.hid.parser;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.EnumSet;
+import java.util.logging.Level;
 
+import net.java.games.input.osx.plugin.DualShock4Plugin;
+import net.java.games.input.usb.UsageId;
+import net.java.games.input.usb.UsagePage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import vavi.awt.joystick.hid4java.Hid4JavaComponent;
 import vavi.hid.parser.HidParser.Feature;
 import vavi.util.Debug;
 import vavi.util.StringUtil;
@@ -53,17 +60,18 @@ Debug.printf("%s, 0x%02x, %s", field.toBit("*", "_"), field.mask, StringUtil.toB
         assertEquals(1, field.offsetByte);
         assertEquals(0x1c, field.mask);
 
-        byte[] data = { 0x00, 0x56 }; // _X*_*_X_ .X.*.*X.
-                                      //   ~~~       ~~~
-                                      //   ~~~        +--- StringUtil#toBits() ... MSB <- LSB
-                                      //    +------------- Field#toBit()       ... LSB -> MSB
+        // the first byte is report id
+        byte[] data = { 0x01, 0x00, 0x56 }; // _X*_*_X_ .X.*.*X.
+                                            //   ~~~       ~~~
+                                            //   ~~~        +--- StringUtil#toBits() ... MSB <- LSB
+                                            //    +------------- Field#toBit()       ... LSB -> MSB
 
         int v = field.getValue(data);
         assertEquals(5, v);
 
         field.setValue(data, (byte) 0x03); // _X**__X_ .X..**X.
                                            //   ~~~       ~~~
-        assertEquals(0x4e, data[1]);
+        assertEquals(0x4e, data[2]); // index value 2 means offset byte (1) + report id size (1)
     }
 
     @Test

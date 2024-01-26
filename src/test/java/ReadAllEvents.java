@@ -1,14 +1,8 @@
-import java.io.IOException;
-
-import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.Event;
-import net.java.games.input.EventQueue;
 import net.java.games.input.osx.plugin.DualShock4Plugin;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import vavi.awt.joystick.hid4java.Hid4JavaController;
 import vavi.awt.joystick.hid4java.Hid4JavaInputEvent;
 
 
@@ -26,6 +20,7 @@ public class ReadAllEvents {
         System.setProperty("net.java.games.input.ControllerEnvironment.excludes", "net.java.games.input");
     }
 
+    /** the most typical test for jinput */
     @Test
     @DisplayName("jinput sample powered by hid4java spi")
     void readAllEvents() throws Exception {
@@ -39,7 +34,15 @@ public class ReadAllEvents {
             if (!controller.isOpen()) {
                 controller.addInputEventListener(e -> {
                     if (e instanceof Hid4JavaInputEvent he) {
-                        DualShock4Plugin.display(he.getData());
+//try {
+// byte[] d = he.getData();
+// OutputStream os = Files.newOutputStream(Path.of("src/test/resources/ds4_ir.dat"));
+// os.write(d, 0, d.length);
+// os.flush();
+// os.close();
+// System.exit(0);
+//} catch (IOException f) {}
+                        DualShock4Plugin.display(he.getData(), System.out);
                     }
                 });
                 controller.open();

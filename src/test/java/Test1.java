@@ -34,6 +34,8 @@ import vavi.util.StringUtil;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 /**
  * Test1.
@@ -199,5 +201,18 @@ Debug.println("➕ controllerAdded: " + ev.getController());
                 .findFirst().get();
 
 Debug.println("controller: " + controller);
+    }
+
+    @Test
+    void test6() throws Exception {
+        int a = 0x1234567;
+        int b = Integer.reverseBytes(a);
+Debug.printf("reverseBytes: %08x", b);
+        assertEquals(0x67452301, b);
+
+        a = 0x12345F7;
+        b = Integer.reverseBytes(a);
+Debug.printf("reverseBytes: %08x", b);
+        assertEquals(0xF7452301, b);
     }
 }

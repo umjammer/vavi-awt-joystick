@@ -26,6 +26,7 @@
 package org.hid4java.examples;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import net.java.games.input.osx.plugin.DualShock4Plugin;
 import net.java.games.input.usb.UsagePage;
@@ -82,7 +83,7 @@ public class UsbHidEnumerationExample extends BaseExample {
     }
 
     static void display(byte[] data) {
-        DualShock4Plugin.display(data);
+        DualShock4Plugin.display(data, System.out);
     }
 
     static void display1(byte[] data) {
