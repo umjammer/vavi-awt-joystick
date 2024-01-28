@@ -8,19 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import net.java.games.input.Controller;
-import net.java.games.input.usb.parser.HidParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.lwjgl.glfw.GLFW;
-import purejavahidapi.HidDevice;
-import purejavahidapi.HidDeviceInfo;
-import purejavahidapi.PureJavaHidApi;
 import vavi.awt.joystick.usb.UsbEnvironmentPlugin;
 import vavi.util.Debug;
-import vavi.util.StringUtil;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -75,27 +69,6 @@ Debug.println(jid);
             }
         }
         GLFW.glfwTerminate();
-    }
-
-    @Test
-    @Disabled("cannot parse")
-    @DisplayName("PureJavaHidApi")
-    void test4() throws Exception {
-        HidDeviceInfo deviceInfo = PureJavaHidApi.enumerateDevices().stream()
-                .filter(d -> d.getVendorId() == 0x54c && d.getProductId() == 0x9cc)
-                .findFirst().get();
-        HidDevice device = PureJavaHidApi.openDevice(deviceInfo);
-        device.open();
-
-Debug.printf("device '%s' ----", device.getHidDeviceInfo().getProductString());
-        byte[] data = new byte[132];
-        int len = device.getFeatureReport(2, data, data.length);
-Debug.printf("getFeatureReport: len: %d", len);
-        if (len > 0) {
-Debug.printf("getFeatureReport:%n%s", StringUtil.getDump(data, len));
-            HidParser hidParser = new HidParser();
-            hidParser.parse(data, len);
-        }
     }
 
     @Test
