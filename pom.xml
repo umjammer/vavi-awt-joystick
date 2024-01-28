@@ -34,7 +34,7 @@
             </goals>
             <configuration>
               <target>
-                <java classname="vavi.hid.parser.GamepadTest" fork="true">
+                <java classname="vavi.awt.joystick.hid4java.GamepadTest" fork="true">
                   <classpath>
                     <path refid="maven.compile.classpath"/>
                     <path refid="maven.test.classpath"/>

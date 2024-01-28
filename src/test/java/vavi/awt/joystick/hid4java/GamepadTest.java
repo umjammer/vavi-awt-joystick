@@ -2,7 +2,7 @@
  * @see "https://bard.google.com/chat/9665fdb38439eac5"
  */
 
-package vavi.hid.parser;
+package vavi.awt.joystick.hid4java;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,10 +15,10 @@ import net.java.games.input.WrappedComponent;
 import net.java.games.input.osx.plugin.DualShock4Plugin;
 import net.java.games.input.usb.HidController;
 import net.java.games.input.usb.HidInputEvent;
+import net.java.games.input.usb.parser.Field;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
-import vavi.awt.joystick.hid4java.Hid4JavaEnvironmentPlugin;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
