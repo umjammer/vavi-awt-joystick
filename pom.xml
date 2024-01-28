@@ -18,39 +18,6 @@
     <profile><id>lwjgl-natives-macos-aarch64</id><activation><os><family>mac</family><arch>aarch64</arch></os></activation><properties><lwjgl.natives>natives-macos-arm64</lwjgl.natives></properties></profile>
     <profile><id>lwjgl-natives-windows-amd64</id><activation><os><family>windows</family><arch>amd64</arch></os></activation><properties><lwjgl.natives>natives-windows</lwjgl.natives></properties></profile>
     <profile><id>lwjgl-natives-windows-x86</id><activation><os><family>windows</family><arch>x86</arch></os></activation><properties><lwjgl.natives>natives-windows-x86</lwjgl.natives></properties></profile>
-
-    <profile>
-      <!-- mvn -P run antrun:run -Dfoo='bar' -->
-      <id>run</id>
-      <build>
-        <plugins>
-          <plugin>
-            <!-- GOOD: fork: OK, test jars: OK, user args, default args: OK -->
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <version>3.1.0</version>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <java classname="vavi.awt.joystick.hid4java.GamepadTest" fork="true">
-                  <classpath>
-                    <path refid="maven.compile.classpath"/>
-                    <path refid="maven.test.classpath"/>
-                  </classpath>
-                  <jvmarg value="-Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties" />
-                  <jvmarg value="-Dswing.defaultlaf=com.formdev.flatlaf.FlatLightLaf" />
-                  <jvmarg value="-Dapple.laf.useScreenMenuBar=true" />
-                  <jvmarg value="-Dapple.awt.application.name=JWinDiff" />
-                  <arg value="${foo}" />
-                </java>
-              </target>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
   </profiles>
 
   <build>
@@ -109,12 +76,6 @@
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
       <version>1.1.9</version>
-    </dependency>
-
-    <dependency>
-      <groupId>net.java.jinput</groupId> <!-- net.java.jinput / com.github.umjammer.jinput -->
-      <artifactId>coreapi</artifactId>
-      <version>2.0.15v-SNAPSHOT</version>
     </dependency>
 
     <dependency>
