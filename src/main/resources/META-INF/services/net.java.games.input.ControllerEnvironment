@@ -1,4 +1,2 @@
-vavi.awt.joystick.hid4java.Hid4JavaEnvironmentPlugin
-#vavi.awt.joystick.hidapi.HidapiEnvironmentPlugin
 #vavi.awt.joystick.usb.UsbEnvironmentPluginvi.awt.joystick.ms.DirectInputEnvironmentPlugin
 #vavi.awt.joystick.ms.DirectInputEnvironmentPlugin

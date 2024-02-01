@@ -20,8 +20,10 @@
  * usb4java doesn't work for dualshock4 on mac ???
  * ~~backport jinput ServiceLoader part into my [jinput](https://github.com/jinput/jinput)~~
  * ~~let hid4java use mac framework directly (bypass hidapi)~~
- * descriptor to components
-   * how can we know descriptor length?
+ * ~~descriptor to components~~
+   * ~~how can we know descriptor length?~~ no needs to do
+ * move hid perser to jinput
+ * dualshock4 pad x, y 12bit little endian ???
 
 ## References
 
@@ -49,6 +51,8 @@
    * https://github.com/electronstudio/sdl2gdx (sdl2)
    * https://github.com/williamahartman/Jamepad -> sdl2gdx
    * https://gamefromscratch.com/libgdx-tutorial-part-14-gamepad-support/ (libgdx)
+ * https://github.com/bwRavencl/ControllerBuddy (hid4java, sdl2, lwjgl)
+ * https://github.com/libgdx/Jamepad (libgdx)
  * dualshock4
    * https://www.psdevwiki.com/ps4/DS4-USB
    * http://eleccelerator.com/wiki/index.php?title=DualShock_4
