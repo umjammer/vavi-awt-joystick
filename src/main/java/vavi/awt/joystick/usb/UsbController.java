@@ -17,12 +17,12 @@ import javax.usb.UsbException;
 import javax.usb.UsbInterface;
 import javax.usb.UsbPipe;
 
-import net.java.games.input.AbstractController;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.Event;
 import net.java.games.input.PollingController;
 import net.java.games.input.Rumbler;
+import net.java.games.input.usb.HidController;
 import vavi.util.Debug;
 
 
@@ -32,7 +32,7 @@ import vavi.util.Debug;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-09-18 nsano initial version <br>
  */
-public abstract class UsbController extends PollingController {
+public abstract class UsbController extends PollingController implements HidController {
 
     private static String getMString(UsbDevice device, int mid, int pid) {
         try {
