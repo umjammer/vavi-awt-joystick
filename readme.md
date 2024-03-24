@@ -13,17 +13,16 @@
 
 * https://jitpack.io/#umjammer/vavi-awt-joystick
 
-## TODO
+## Usage
 
- * ~~first check for a checkbox menu item~~
- * ~~use standard library for Timer~~
- * usb4java doesn't work for dualshock4 on mac ???
- * ~~backport jinput ServiceLoader part into my [jinput](https://github.com/jinput/jinput)~~
- * ~~let hid4java use mac framework directly (bypass hidapi)~~
- * ~~descriptor to components~~
-   * ~~how can we know descriptor length?~~ no needs to do
- * move hid perser to jinput
- * dualshock4 pad x, y 12bit little endian ???
+### example
+
+ * [joystic mapper replacement](src/test/java/vavi/games/input/listener/MinecraftListener.java)
+
+### graduator
+
+* [hid4java](https://github.com/umjammer/hid4java)
+* [purejavahidapi](https://github.com/umjammer/purejavahidapi)
 
 ## References
 
@@ -42,6 +41,8 @@
  * Game Controller framework (GCController)
    * https://chromium.googlesource.com/chromium/src/+/HEAD/device/gamepad/game_controller_data_fetcher_mac.mm
    * https://developer.apple.com/documentation/gamecontroller/gcdualshockgamepad gimme a sample
+   * https://discussionsjapan.apple.com/thread/255250239 no answer
+   * https://discussions.apple.com/thread/255260004 no answer (multipost lol)
  * lwjgl (glfw : IOKit(HID))
    * maven template... https://www.lwjgl.org/customize
    * https://github.com/TeamMidnightDust/MidnightControls (glfw)
@@ -51,7 +52,7 @@
    * https://github.com/electronstudio/sdl2gdx (sdl2)
    * https://github.com/williamahartman/Jamepad -> sdl2gdx
    * https://gamefromscratch.com/libgdx-tutorial-part-14-gamepad-support/ (libgdx)
- * https://github.com/bwRavencl/ControllerBuddy (hid4java, sdl2, lwjgl)
+ * https://github.com/bwRavencl/ControllerBuddy (hid4java, sdl2, lwjgl) for flight simulator
  * https://github.com/libgdx/Jamepad (libgdx)
  * dualshock4
    * https://www.psdevwiki.com/ps4/DS4-USB
@@ -72,22 +73,19 @@
  * cui
    * https://github.com/JetBrains/jediterm
 
-## Tech Know
+### Tech Know
 
-```
-  +---+---------+---------------+-------------------+
-  |   |         |               | USB-IF            | <-> USB
-  | J | Windows |     HID       +-------------------+
-  | i |         |               | Bluetooth Profile | <-> Bluetooth
-  | n +---------+-----+         +-------------------+
-  | p |         |     |         |    :              |
-  | u |  MacOS  |     +---------+-------------------+
-  | t |         |               | USB               |
-  |   |         |     IOKit     +-------------------+
-  |   |         |               | FireWire          |
-  |   |         |               +-------------------+
-  |   |         |               | ATSMART           |
-  |   |         |               +-------------------+
-  |   |         |               |     :             |
-  +---+---------+---------------+-------------------+
- ```
+* [usb? hid?](https://github.com/umjammer/vavi-awt-joystick/wiki/Tech-Know)
+
+## TODO
+
+* ~~first check for a checkbox menu item~~
+* ~~use standard library for Timer~~
+* usb4java doesn't work for dualshock4 on mac ???
+* ~~backport jinput ServiceLoader part into my [jinput](https://github.com/jinput/jinput)~~
+* ~~let hid4java use mac framework directly (bypass hidapi)~~
+* ~~descriptor to components~~
+   * ~~how can we know descriptor length?~~ no needs to do
+* ~~move hid perser to jinput~~
+* ~~dualshock4 pad x, y 12bit little endian ???~~
+* rename to vavi-awt-gamepad
