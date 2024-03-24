@@ -13,7 +13,6 @@ import java.util.logging.Level;
 
 import com.ms.directX.DirectXConstants;
 import com.ms.directX.JoyInfo;
-import net.java.games.input.AbstractController;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.Event;

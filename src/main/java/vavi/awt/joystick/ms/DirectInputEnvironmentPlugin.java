@@ -14,8 +14,10 @@ import com.ms.directX.JoyCaps;
 import com.ms.directX.JoyInfo;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
+import net.java.games.input.ControllerListenerSupport;
 import net.java.games.input.Rumbler;
+import net.java.games.input.usb.HidController;
+import net.java.games.input.usb.HidControllerEnvironment;
 import vavi.util.Debug;
 
 
@@ -25,7 +27,7 @@ import vavi.util.Debug;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-09-18 nsano initial version <br>
  */
-public final class DirectInputEnvironmentPlugin extends ControllerEnvironment {
+public final class DirectInputEnvironmentPlugin extends ControllerListenerSupport implements HidControllerEnvironment {
 
     /** */
     private final List<DirectInputController> controllers = new ArrayList<>();
@@ -191,7 +193,7 @@ Debug.printStackTrace(e);
         directInput.getPos(id, joyInfo);
     }
 
-    public Controller getController(int mid, int pid) {
+    public HidController getController(int mid, int pid) {
         for (DirectInputController controller : controllers) {
             if (controller.getVendorId() == mid && controller.getProductId() == pid) {
                 return controller;

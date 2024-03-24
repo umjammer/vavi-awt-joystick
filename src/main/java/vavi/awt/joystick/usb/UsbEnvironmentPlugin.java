@@ -14,7 +14,9 @@ import javax.usb.UsbHostManager;
 import javax.usb.UsbHub;
 
 import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
+import net.java.games.input.ControllerListenerSupport;
+import net.java.games.input.usb.HidController;
+import net.java.games.input.usb.HidControllerEnvironment;
 import vavi.util.Debug;
 
 
@@ -24,7 +26,7 @@ import vavi.util.Debug;
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 230919 nsano initial version <br>
  */
-public final class UsbEnvironmentPlugin extends ControllerEnvironment {
+public final class UsbEnvironmentPlugin extends ControllerListenerSupport implements HidControllerEnvironment {
 
     /** */
     public UsbEnvironmentPlugin() {
@@ -80,7 +82,8 @@ Debug.printf("%1$d, [%2$d,0x%2$x], %3$d, [%4$d,0x%4$x]%n", desc.idVendor(), mid,
         return null;
     }
 
-    public Controller getController(int mid, int pid) {
+    @Override
+    public HidController getController(int mid, int pid) {
         for (UsbController controller : controllers) {
             if (controller.getManufacturerId() == mid && controller.getProductId() == pid) {
                 return controller;
