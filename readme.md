@@ -21,8 +21,8 @@
 
 ### graduator
 
-* [hid4java](https://github.com/umjammer/hid4java)
-* [purejavahidapi](https://github.com/umjammer/purejavahidapi)
+* 🎓 [hid4java](https://github.com/umjammer/hid4java)
+* 🎓 [purejavahidapi](https://github.com/umjammer/purejavahidapi)
 
 ## References
 

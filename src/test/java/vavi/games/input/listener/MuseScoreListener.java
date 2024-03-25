@@ -19,7 +19,7 @@ import static org.rococoa.carbon.CarbonCoreLibrary.kVK_Command;
 
 
 /**
- * MuseScoreListener.
+ * MuseScoreListener prototype.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2024-03-20 nsano initial version <br>

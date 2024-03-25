@@ -7,6 +7,7 @@
 package vavi.games.input.listener;
 
 import net.java.games.input.Event;
+import vavi.games.input.listener.GamepadInputEventListener.Context;
 
 
 /**
@@ -16,6 +17,14 @@ import net.java.games.input.Event;
  * @version 0.00 2024-03-20 nsano initial version <br>
  */
 public abstract class GamepadAdapter implements GamepadListener {
+
+    @Override
+    public void init(Context context) {}
+
+    @Override
+    public void active() {}
+    @Override
+    public void deactive() {}
 
     @Override
     public void before() {}
