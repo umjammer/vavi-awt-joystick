@@ -10,6 +10,7 @@ import java.util.List;
 
 import net.java.games.input.Event;
 import org.rococoa.cocoa.appkit.NSRunningApplication;
+import vavi.games.input.listener.GamepadInputEventListener.Context;
 
 
 /**
@@ -20,7 +21,12 @@ import org.rococoa.cocoa.appkit.NSRunningApplication;
  */
 public interface GamepadListener {
 
+    void init(Context context);
+
     boolean match(NSRunningApplication a);
+
+    void active();
+    void deactive();
 
     void before();
 

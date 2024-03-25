@@ -10,17 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
 
+import com.sun.jna.Callback;
 import net.java.games.input.Component;
 import net.java.games.input.Event;
 import net.java.games.input.InputEvent;
 import net.java.games.input.InputEventListener;
+import org.rococoa.Foundation;
+import org.rococoa.ObjCObject;
+import org.rococoa.Rococoa;
+import org.rococoa.Selector;
 import org.rococoa.cocoa.appkit.NSRunningApplication;
 import org.rococoa.cocoa.appkit.NSWorkspace;
+import org.rococoa.cocoa.foundation.NSNotification;
+import org.rococoa.cocoa.foundation.NSNotificationCenter;
 import vavi.util.Debug;
+import vavi.util.event.GenericEvent;
+import vavi.util.event.GenericListener;
+import vavi.util.event.GenericSupport;
 
 
 /**
@@ -28,7 +37,6 @@ import vavi.util.Debug;
  *
  * system properties
  * <ul>
- *  <li>vavi.games.input.listener.period ... top most application detection interval, default 1000</li>
  *  <li>vavi.games.input.listener.warmup ... delay time to start sending events to an application, default 1500</li>
  * </ul>
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
@@ -36,51 +44,95 @@ import vavi.util.Debug;
  */
 public class GamepadInputEventListener implements InputEventListener {
 
-    private static final List<GamepadListener> listeners = new ArrayList<>();
+    private final List<GamepadListener> listeners = new ArrayList<>();
 
-    private static int period;
+    /** delay time to start sending events to an application */
     private static int warmup;
 
     static {
-        ServiceLoader.load(GamepadListener.class).forEach(listeners::add);
-
-        period = Integer.parseInt(System.getProperty("vavi.games.input.listener.period", "1000"));
         warmup = Integer.parseInt(System.getProperty("vavi.games.input.listener.warmup", "1500"));
     }
 
-    private final AtomicReference<GamepadListener> listenerR = new AtomicReference<>();
+    /** holds current listener */
+    private final AtomicReference<GamepadListener> currentListener = new AtomicReference<>();
 
-    private long activationTime;
+    /** store when time of application changed */
+    private long warmupTime;
 
-    {
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
-            // TODO notification needed for realtime detection
-            //  https://stackoverflow.com/a/33395422
-            NSRunningApplication a = NSWorkspace.sharedWorkspace().frontmostApplication();
-//Debug.println(a);
-            Optional<GamepadListener> o =  listeners.stream().filter(l -> l.match(a)).findFirst();
-            if (o.isEmpty()) {
-                if (listenerR.get() != null) {
-Debug.println(">>FRONTMOST: none");
-                    listenerR.set(null);
-                }
-            } else {
-                if (listenerR.get() != o.get()) {
-Debug.println(">>FRONTMOST: " + o.get());
-                    listenerR.set(o.get());
-                    activationTime = System.currentTimeMillis();
-                }
+    private final GenericSupport observers = new GenericSupport();
+
+    public void addObserver(GenericListener observer) {
+        observers.addGenericListener(observer);
+    }
+
+    public class Context {
+        private Context() {}
+        public void fireEventHappened(GenericEvent event) {
+            observers.fireEventHappened(event);
+        }
+    }
+
+    private final Context context = new Context();
+
+    public class WorkspaceObserver implements Callback {
+        public void applicationWasActivated(NSNotification notification) {
+            NSWorkspace workspace = Rococoa.cast(notification.object(), NSWorkspace.class);
+            NSRunningApplication a = workspace.frontmostApplication();
+//Debug.println("applicationWasActivated: " + a.bundleIdentifier());
+            process(a);
+        }
+
+        public void applicationWasDeactivated(NSNotification notification) {
+            NSWorkspace workspace = Rococoa.cast(notification.object(), NSWorkspace.class);
+            NSRunningApplication a = workspace.frontmostApplication();
+//Debug.println("applicationWasDeactivated: " + a.bundleIdentifier());
+            process(a);
+        }
+    }
+
+    /** */
+    public GamepadInputEventListener() {
+        ServiceLoader.load(GamepadListener.class).forEach(listener -> {
+            listeners.add(listener);
+            listener.init(context);
+        });
+
+        ObjCObject proxy = Rococoa.proxy(new WorkspaceObserver());
+        Selector sel1 = Foundation.selector("applicationWasActivated:");
+        Selector sel2 = Foundation.selector("applicationWasDeactivated:");
+
+        NSNotificationCenter notificationCenter = NSWorkspace.sharedWorkspace().notificationCenter();
+        notificationCenter.addObserver_selector_name_object(proxy.id(), sel1, NSWorkspace.NSWorkspaceDidActivateApplicationNotification, null);
+        notificationCenter.addObserver_selector_name_object(proxy.id(), sel2, NSWorkspace.NSWorkspaceDidDeactivateApplicationNotification, null);
+    }
+
+    /** @see "https://stackoverflow.com/a/33395422" */
+    void process(NSRunningApplication a) {
+//Debug.println(a.bundleIdentifier() + ":" + a.processIdentifier());
+        Optional<GamepadListener> o =  listeners.stream().filter(l -> l.match(a)).findFirst();
+        if (o.isEmpty()) {
+            if (currentListener.get() != null) {
+Debug.println(Level.FINE, ">>FRONTMOST: none");
+                currentListener.get().deactive();
+                currentListener.set(null);
             }
-        }, 0, period, TimeUnit.MICROSECONDS);
+        } else {
+            if (currentListener.get() != o.get()) {
+Debug.println(Level.FINE, ">>FRONTMOST: " + o.get());
+                currentListener.set(o.get());
+                o.get().active();
+                warmupTime = System.currentTimeMillis();
+            }
+        }
     }
 
     @Override
     public void onInput(InputEvent event) {
-        GamepadListener listener = listenerR.get();
+        GamepadListener listener = currentListener.get();
         if (listener == null) {
             return;
         }
-        if (System.currentTimeMillis() - activationTime < warmup) {
+        if (System.currentTimeMillis() - warmupTime < warmup) {
 //Debug.println("warmup: " + listener);
             return;
         }

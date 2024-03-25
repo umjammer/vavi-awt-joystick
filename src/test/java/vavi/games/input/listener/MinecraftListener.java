@@ -55,7 +55,7 @@ import static org.rococoa.cocoa.coregraphics.CoreGraphicsLibrary.library;
 
 
 /**
- * MuseScoreListener.
+ * MinecraftListener prototype.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2024-03-20 nsano initial version <br>
