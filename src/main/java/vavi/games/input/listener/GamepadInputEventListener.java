@@ -26,6 +26,11 @@ import vavi.util.Debug;
 /**
  * GamepadInputEventListener.
  *
+ * system properties
+ * <ul>
+ *  <li>vavi.games.input.listener.period ... top most application detection interval, default 1000</li>
+ *  <li>vavi.games.input.listener.warmup ... delay time to start sending events to an application, default 1500</li>
+ * </ul>
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2024-03-21 nsano initial version <br>
  */
@@ -33,8 +38,14 @@ public class GamepadInputEventListener implements InputEventListener {
 
     private static final List<GamepadListener> listeners = new ArrayList<>();
 
+    private static int period;
+    private static int warmup;
+
     static {
         ServiceLoader.load(GamepadListener.class).forEach(listeners::add);
+
+        period = Integer.parseInt(System.getProperty("vavi.games.input.listener.period", "1000"));
+        warmup = Integer.parseInt(System.getProperty("vavi.games.input.listener.warmup", "1500"));
     }
 
     private final AtomicReference<GamepadListener> listenerR = new AtomicReference<>();
@@ -43,6 +54,8 @@ public class GamepadInputEventListener implements InputEventListener {
 
     {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            // TODO notification needed for realtime detection
+            //  https://stackoverflow.com/a/33395422
             NSRunningApplication a = NSWorkspace.sharedWorkspace().frontmostApplication();
 //Debug.println(a);
             Optional<GamepadListener> o =  listeners.stream().filter(l -> l.match(a)).findFirst();
@@ -58,7 +71,7 @@ Debug.println(">>FRONTMOST: " + o.get());
                     activationTime = System.currentTimeMillis();
                 }
             }
-        }, 0, 1000, TimeUnit.MICROSECONDS);
+        }, 0, period, TimeUnit.MICROSECONDS);
     }
 
     @Override
@@ -67,7 +80,8 @@ Debug.println(">>FRONTMOST: " + o.get());
         if (listener == null) {
             return;
         }
-        if (System.currentTimeMillis() - activationTime < 1500) {
+        if (System.currentTimeMillis() - activationTime < warmup) {
+//Debug.println("warmup: " + listener);
             return;
         }
 
