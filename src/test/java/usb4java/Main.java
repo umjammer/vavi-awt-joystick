@@ -69,7 +69,7 @@ Debug.printf("found: %04x:%04x%n", vid, pid);
         return usbDevice;
     }
 
-    private DeviceHandle getDeviceHandle(Device device) {
+    private static DeviceHandle getDeviceHandle(Device device) {
         DeviceHandle handle = new DeviceHandle();
         int result = LibUsb.open(device, handle);
 

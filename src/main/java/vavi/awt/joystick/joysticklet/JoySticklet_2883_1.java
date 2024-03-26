@@ -42,6 +42,7 @@ public class JoySticklet_2883_1 extends Joysticklet {
             setBackground(Color.yellow);
         }
 
+        @Override
         public void paint(Graphics g) {
             super.paint(g);
             int width = getSize().width;
@@ -62,12 +63,14 @@ public class JoySticklet_2883_1 extends Joysticklet {
             this.image = image;
         }
 
+        @Override
         public void paint(Graphics g) {
             super.paint(g);
             if (image == null || !g.drawImage(image, 0, 0, this))
                 g.drawString("image N/A", 10, 10);
         }
 
+        @Override
         public boolean imageUpdate(Image img, int infoflags,
                                    int x, int y, int width, int height) {
             if ((infoflags & ImageObserver.ALLBITS) == ImageObserver.ALLBITS) {

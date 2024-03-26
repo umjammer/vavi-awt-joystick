@@ -14,7 +14,6 @@ import net.java.games.input.usb.HidController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
-import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import vavi.games.input.hid4java.spi.Hid4JavaEnvironmentPlugin;
 import vavi.util.properties.annotation.Property;

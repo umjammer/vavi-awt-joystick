@@ -136,12 +136,12 @@ public final class DirectInputEnvironmentPlugin extends ControllerListenerSuppor
                         System.err.println("caps:\t\t" + joyCaps.caps);
                         System.err.println("maxAxes:\t" + joyCaps.maxAxes);
                         System.err.println("maxButtons:\t" + joyCaps.maxButtons);
-                        System.err.println("mid:\t\t" + (int) joyCaps.mid);
+                        System.err.println("mid:\t\t" + joyCaps.mid);
                         System.err.println("numAxes:\t" + joyCaps.numAxes);
                         System.err.println("numButtons:\t" + joyCaps.numButtons);
                         System.err.println("periodMax:\t" + joyCaps.periodMax);
                         System.err.println("periodMin:\t" + joyCaps.periodMin);
-                        System.err.println("pid:\t\t" + (int) joyCaps.pid);
+                        System.err.println("pid:\t\t" + joyCaps.pid);
                         System.err.println("rMax:\t\t" + joyCaps.rMax);
                         System.err.println("rMin:\t\t" + joyCaps.rMin);
                         System.err.println("uMax:\t\t" + joyCaps.uMax);
@@ -193,6 +193,7 @@ Debug.printStackTrace(e);
         directInput.getPos(id, joyInfo);
     }
 
+    @Override
     public HidController getController(int mid, int pid) {
         for (DirectInputController controller : controllers) {
             if (controller.getVendorId() == mid && controller.getProductId() == pid) {

@@ -223,7 +223,7 @@ public class DescriptorDumper {
      * @param type       The type of the value in bmControls.
      * @param indent     The current indent level.
      */
-    private void dumpDescBmControl(
+    private static void dumpDescBmControl(
             long bmControls,
             String[] strings,
             DescType type,
@@ -268,7 +268,7 @@ public class DescriptorDumper {
      * @param bytes  Number of bytes to read.
      * @return Value contained within the given bytes.
      */
-    private long getNBytes(
+    private static long getNBytes(
             byte[] buf,
             int offset,
             int bytes) {
@@ -533,7 +533,7 @@ public class DescriptorDumper {
     }
 
     /**
-     * Get the number of entries needed by an descriptor definition Array field.
+     * Get the number of entries needed by a descriptor definition Array field.
      * <p>
      * The number of entries is either calculated from length_field parameters,
      * which indicate which other field(s) contain values representing the
@@ -615,7 +615,7 @@ public class DescriptorDumper {
      * @param array_entries Number of entries in Array.
      * @return number of characters required to render largest possible index.
      */
-    private int get_char_count_for_array_index(int array_entries) {
+    private static int get_char_count_for_array_index(int array_entries) {
         // Arrays are zero-indexed, so largest index is array_entries - 1.
         if (array_entries > 100) {
             // [NNN]
@@ -744,11 +744,11 @@ public class DescriptorDumper {
         }
     }
 
-    private String get_dev_string(HidDevice dev, byte b) {
+    private static String get_dev_string(HidDevice dev, byte b) {
         return "not supported";
     }
 
-    private String names_audioterminal(long nBytes) {
+    private static String names_audioterminal(long nBytes) {
         return "not supported";
     }
 }

@@ -7,7 +7,6 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import com.sun.jna.platform.mac.CoreFoundation.CFArrayRef;
 import net.java.games.input.Controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

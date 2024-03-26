@@ -71,11 +71,11 @@ public class DirectInputController extends PollingController implements HidContr
     protected Deque<Event> events = new ArrayDeque<>();
 
     /** The device id */
-    private int id;
+    private final int id;
     /** The device product id */
-    private int pid;
+    private final int pid;
     /** The device manufacturer id */
-    private int mid;
+    private final int mid;
 
     @Override
     public int getVendorId() {
@@ -88,7 +88,7 @@ public class DirectInputController extends PollingController implements HidContr
     }
 
     /** */
-    private JoyInfo backup = new JoyInfo();
+    private final JoyInfo backup = new JoyInfo();
 
     @Override
     protected void pollDevice() throws IOException {
