@@ -6,11 +6,9 @@
 
 package vavi.games.input.listener;
 
-import java.util.List;
-
 import net.java.games.input.Event;
-import org.rococoa.cocoa.appkit.NSRunningApplication;
-import org.rococoa.cocoa.coregraphics.RococaRobot;
+import vavi.games.input.listener.GamepadInputEventListener.AppInfo;
+import vavi.games.input.robot.RococaRobot;
 import vavi.util.Debug;
 
 import static org.rococoa.carbon.CarbonCoreLibrary.kVK_ANSI_Backslash;
@@ -31,8 +29,8 @@ public class MuseScoreListener extends GamepadAdapter {
     long prev = System.currentTimeMillis();
 
     @Override
-    public boolean match(NSRunningApplication a) {
-        return a.bundleIdentifier().equals("org.musescore.MuseScore");
+    public boolean match(AppInfo a) {
+        return a.id().equals("org.musescore.MuseScore");
     }
 
     @Override

@@ -6,6 +6,7 @@
 
 package vavi.games.input.listener;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,19 +14,11 @@ import java.util.ServiceLoader;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 
-import com.sun.jna.Callback;
 import net.java.games.input.Component;
 import net.java.games.input.Event;
 import net.java.games.input.InputEvent;
 import net.java.games.input.InputEventListener;
-import org.rococoa.Foundation;
-import org.rococoa.ObjCObject;
-import org.rococoa.Rococoa;
-import org.rococoa.Selector;
-import org.rococoa.cocoa.appkit.NSRunningApplication;
-import org.rococoa.cocoa.appkit.NSWorkspace;
-import org.rococoa.cocoa.foundation.NSNotification;
-import org.rococoa.cocoa.foundation.NSNotificationCenter;
+import vavi.games.input.helper.RococoaAppChangeListener;
 import vavi.util.Debug;
 import vavi.util.event.GenericEvent;
 import vavi.util.event.GenericListener;
@@ -74,20 +67,14 @@ public class GamepadInputEventListener implements InputEventListener {
 
     private final Context context = new Context();
 
-    public class WorkspaceObserver implements Callback {
-        public void applicationWasActivated(NSNotification notification) {
-            NSWorkspace workspace = Rococoa.cast(notification.object(), NSWorkspace.class);
-            NSRunningApplication a = workspace.frontmostApplication();
-//Debug.println("applicationWasActivated: " + a.bundleIdentifier());
-            process(a);
-        }
+    public interface AppInfo {
+        String id();
+        int pid();
+        Rectangle bounds();
+    }
 
-        public void applicationWasDeactivated(NSNotification notification) {
-            NSWorkspace workspace = Rococoa.cast(notification.object(), NSWorkspace.class);
-            NSRunningApplication a = workspace.frontmostApplication();
-//Debug.println("applicationWasDeactivated: " + a.bundleIdentifier());
-            process(a);
-        }
+    public interface AppChangeListener {
+        void onAppChanged(AppInfo a);
     }
 
     /** */
@@ -97,33 +84,32 @@ public class GamepadInputEventListener implements InputEventListener {
             listener.init(context);
         });
 
-        ObjCObject proxy = Rococoa.proxy(new WorkspaceObserver());
-        Selector sel1 = Foundation.selector("applicationWasActivated:");
-        Selector sel2 = Foundation.selector("applicationWasDeactivated:");
-
-        NSNotificationCenter notificationCenter = NSWorkspace.sharedWorkspace().notificationCenter();
-        notificationCenter.addObserver_selector_name_object(proxy.id(), sel1, NSWorkspace.NSWorkspaceDidActivateApplicationNotification, null);
-        notificationCenter.addObserver_selector_name_object(proxy.id(), sel2, NSWorkspace.NSWorkspaceDidDeactivateApplicationNotification, null);
-    }
-
-    /** @see "https://stackoverflow.com/a/33395422" */
-    void process(NSRunningApplication a) {
+        new RococoaAppChangeListener() {
+            /** @see "https://stackoverflow.com/a/33395422" */
+            @Override public void onAppChanged(AppInfo a) {
+try {
 //Debug.println(a.bundleIdentifier() + ":" + a.processIdentifier());
-        Optional<GamepadListener> o =  listeners.stream().filter(l -> l.match(a)).findFirst();
-        if (o.isEmpty()) {
-            if (currentListener.get() != null) {
+                Optional<GamepadListener> o =  listeners.stream().filter(l -> l.match(a)).findFirst();
+                if (o.isEmpty()) {
+                    if (currentListener.get() != null) {
 Debug.println(Level.FINE, ">>FRONTMOST: none");
-                currentListener.get().deactive();
-                currentListener.set(null);
-            }
-        } else {
-            if (currentListener.get() != o.get()) {
+                        currentListener.get().deactive();
+                        currentListener.set(null);
+                    }
+                } else {
+                    if (currentListener.get() != o.get()) {
+
 Debug.println(Level.FINE, ">>FRONTMOST: " + o.get());
-                currentListener.set(o.get());
-                o.get().active();
-                warmupTime = System.currentTimeMillis();
+                        currentListener.set(o.get());
+                        o.get().active();
+                        warmupTime = System.currentTimeMillis();
+                    }
+                }
+} catch (Throwable t) {
+ Debug.printStackTrace(t);
+}
             }
-        }
+        };
     }
 
     @Override

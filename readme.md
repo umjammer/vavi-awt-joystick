@@ -89,3 +89,4 @@
 * ~~move hid perser to jinput~~
 * ~~dualshock4 pad x, y 12bit little endian ???~~
 * rename to vavi-awt-gamepad
+* ~~hide os dependent implementation by interface~~
