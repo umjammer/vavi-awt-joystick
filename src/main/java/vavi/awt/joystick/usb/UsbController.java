@@ -27,7 +27,7 @@ import vavi.util.Debug;
 
 
 /**
- * Hid4JavaController.
+ * UsbController.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-09-18 nsano initial version <br>
