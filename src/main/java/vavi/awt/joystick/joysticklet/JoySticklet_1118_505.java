@@ -27,26 +27,26 @@ import vavi.awt.joystick.Joysticklet;
  */
 public class JoySticklet_1118_505 extends Joysticklet {
 
-    private Label up    = new Label();
-    private Label right = new Label();
-    private Label down  = new Label();
-    private Label left  = new Label();
+    private final Label up    = new Label();
+    private final Label right = new Label();
+    private final Label down  = new Label();
+    private final Label left  = new Label();
 
-    private Label[] b = new Label[] {
+    private final Label[] b = new Label[] {
         new Label(), new Label(), new Label(),
         new Label(), new Label(), new Label()
     };
 
-    private Executable leftAction;
-    private Executable rightAction;
-    private Executable upAction;
-    private Executable downAction;
-    private Executable b1Action;
-    private Executable b2Action;
-    private Executable b3Action;
-    private Executable b4Action;
-    private Executable b5Action;
-    private Executable b6Action;
+    private final Executable leftAction;
+    private final Executable rightAction;
+    private final Executable upAction;
+    private final Executable downAction;
+    private final Executable b1Action;
+    private final Executable b2Action;
+    private final Executable b3Action;
+    private final Executable b4Action;
+    private final Executable b5Action;
+    private final Executable b6Action;
 
     private static final Color onColor2 = Color.red;
     private static final Color onColor1 = Color.yellow;
@@ -112,7 +112,7 @@ public class JoySticklet_1118_505 extends Joysticklet {
         panel.setSize(200, 50);
         panel.setLocation(290, 170);
 
-        final int[] o = new int[] { 0, 1, 4, 2, 3, 5 };
+        int[] o = new int[] { 0, 1, 4, 2, 3, 5 };
         for (int i = 0; i < 6; i++) {
             panel.add(new Label("B" + (o[i] + 1)));
             panel.add(b[o[i]]);

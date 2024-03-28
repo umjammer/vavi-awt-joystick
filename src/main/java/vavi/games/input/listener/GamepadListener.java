@@ -6,10 +6,7 @@
 
 package vavi.games.input.listener;
 
-import java.util.List;
-
 import net.java.games.input.Event;
-import org.rococoa.cocoa.appkit.NSRunningApplication;
 import vavi.games.input.listener.GamepadInputEventListener.AppInfo;
 import vavi.games.input.listener.GamepadInputEventListener.Context;
 

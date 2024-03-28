@@ -1,2 +1,3 @@
 #vavi.awt.joystick.usb.UsbEnvironmentPluginvi.awt.joystick.ms.DirectInputEnvironmentPlugin
 #vavi.awt.joystick.ms.DirectInputEnvironmentPlugin
+vavi.games.input.rococoa.spi.RococoaEnvironmentPlugin

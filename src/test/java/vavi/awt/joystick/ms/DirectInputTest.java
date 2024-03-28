@@ -111,6 +111,7 @@ public class DirectInputTest {
         backup = jsl;
 
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent ev) {
                 System.exit(0);
             }

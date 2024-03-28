@@ -27,7 +27,7 @@ import vavi.util.Debug;
 
 
 /**
- * Hid4JavaController.
+ * UsbController.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-09-18 nsano initial version <br>
@@ -104,9 +104,9 @@ Debug.println("OUT: " + endpointOut);
     protected Deque<Event> events = new ArrayDeque<>();
 
     /** The device product id */
-    private int pid;
+    private final int pid;
     /** The device manufacturer id */
-    private int mid;
+    private final int mid;
 
     /** Returns device manufacturer id */
     public int getManufacturerId() {
@@ -114,16 +114,17 @@ Debug.println("OUT: " + endpointOut);
     }
 
     /** Returns device product id */
+    @Override
     public int getProductId() {
         return pid;
     }
 
     /** */
-    private UsbDevice device;
-    private UsbInterface usbInterface;
+    private final UsbDevice device;
+    private final UsbInterface usbInterface;
 
-    private UsbPipe pipeIn;
-    private UsbPipe pipeOut;
+    private final UsbPipe pipeIn;
+    private final UsbPipe pipeOut;
 
     @Override
     public synchronized void open() {

@@ -34,7 +34,7 @@ public class DumpDeviceTree {
             System.out.print("  ");
         System.out.println(device);
         if (device.isUsbHub()) {
-            final UsbHub hub = (UsbHub) device;
+            UsbHub hub = (UsbHub) device;
             for (UsbDevice child : (List<UsbDevice>) hub.getAttachedUsbDevices()) {
                 dump(child, level + 1);
             }

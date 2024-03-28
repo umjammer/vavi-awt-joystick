@@ -29,7 +29,7 @@ import static org.rococoa.cocoa.coregraphics.CoreGraphicsLibrary.library;
  */
 public class RococoaAppInfo implements AppInfo {
 
-    private NSRunningApplication a;
+    private final NSRunningApplication a;
 
     public RococoaAppInfo(NSRunningApplication a) {
         this.a = a;

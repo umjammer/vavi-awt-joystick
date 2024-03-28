@@ -53,8 +53,6 @@ import static vavi.games.input.helper.JavaVMAppInfo.getPidByMainClassName;
  */
 public class MinecraftListener extends GamepadAdapter {
 
-    private int count = 0;
-
     /** minecraft launchers descriptor#dusplayName */
     private static final String[] mcLaunchers = {
             "net.minecraft.client.main.Main", // mc launcher -> original
@@ -71,23 +69,20 @@ public class MinecraftListener extends GamepadAdapter {
             return false;
         }
         if (a.pid() == pid) {
-            if (count % 20 == 0) {
-                Executors.newSingleThreadScheduledExecutor().submit(() -> {
-                    Rectangle b = a.bounds();
-                    if (b != null) {
-                        Rectangle r = bounds.get();
-                        if (r == null) {
-                            bounds.set(b);
-                        } else {
-                            r.setBounds(b);
-                        }
+            Executors.newSingleThreadScheduledExecutor().submit(() -> {
+                Rectangle b = a.bounds();
+                if (b != null) {
+                    Rectangle r = bounds.get();
+                    if (r == null) {
+                        bounds.set(b);
+                    } else {
+                        r.setBounds(b);
+                    }
 //Debug.println("minecraft window found: " + r);
-                        count++;
 //                    } else {
 //Debug.println("no minecraft window found.");
-                    }
-                });
-            }
+                }
+            });
             return true;
         } else {
             return false;

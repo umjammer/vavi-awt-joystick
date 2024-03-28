@@ -50,17 +50,19 @@ public abstract class Joysticklet extends Panel {
 
     /** */
     protected static class Command implements Executable {
+        @Override
         public void exec() {
         }
     }
 
     /** */
     protected static class ShellCommand extends Command {
-        private String commandLine;
+        private final String commandLine;
         public ShellCommand(String commandLine) {
             this.commandLine = commandLine;
 System.err.println(this.commandLine);
         }
+        @Override
         public void exec() {
             try {
                 Runtime.getRuntime().exec(commandLine.split("\\s+"));

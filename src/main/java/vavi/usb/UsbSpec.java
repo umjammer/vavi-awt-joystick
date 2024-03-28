@@ -11,8 +11,6 @@ package vavi.usb;
 import java.util.HashMap;
 import java.util.Map;
 
-import vavi.util.Debug;
-
 
 /**
  * UsbSpec.
