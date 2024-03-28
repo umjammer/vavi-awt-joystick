@@ -92,7 +92,13 @@
     <dependency>
       <groupId>com.github.umjammer.rococoa</groupId> <!-- org.rococoa / com.github.umjammer.rococoa -->
       <artifactId>rococoa-contrib</artifactId>
-      <version>0.8.11</version>
+      <version>0.8.12</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.umjammer.jinput</groupId> <!-- net.java.jinput / com.github.umjammer.jinput -->
+      <artifactId>coreapi</artifactId>
+      <version>2.0.19v</version>
     </dependency>
 
     <dependency>

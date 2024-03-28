@@ -19,7 +19,7 @@
 
  * [joystic mapper replacement](src/test/java/vavi/games/input/listener/MinecraftListener.java)
 
-### graduator
+### graduates
 
 * 🎓 [hid4java](https://github.com/umjammer/hid4java)
 * 🎓 [purejavahidapi](https://github.com/umjammer/purejavahidapi)
@@ -41,8 +41,8 @@
  * Game Controller framework (GCController)
    * https://chromium.googlesource.com/chromium/src/+/HEAD/device/gamepad/game_controller_data_fetcher_mac.mm
    * https://developer.apple.com/documentation/gamecontroller/gcdualshockgamepad gimme a sample
-   * https://discussionsjapan.apple.com/thread/255250239 no answer
-   * https://discussions.apple.com/thread/255260004 no answer (multipost lol)
+   * ~~https://discussionsjapan.apple.com/thread/255250239 no answer~~ macOS 14.3.1 is abel to detect ds4
+   * ~~https://discussions.apple.com/thread/255260004 no answer (multipost lol)~~ ditto
  * lwjgl (glfw : IOKit(HID))
    * maven template... https://www.lwjgl.org/customize
    * https://github.com/TeamMidnightDust/MidnightControls (glfw)
