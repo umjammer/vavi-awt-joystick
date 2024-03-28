@@ -15,6 +15,7 @@ import net.java.games.input.Event;
 import net.java.games.input.EventQueue;
 import net.java.games.input.PollingController;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import vavi.util.Debug;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2024-03-28 nsano initial version <br>
  */
+@EnabledIfSystemProperty(named = "vavi.test", matches = "ide")
 class RococoaEnvironmentPluginTest {
 
     @Test
