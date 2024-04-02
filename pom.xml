@@ -3,7 +3,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-awt-joystick</artifactId>
-  <version>0.0.9</version>
+  <version>0.0.10</version>
 
   <properties>
     <lwjgl.version>3.3.2</lwjgl.version>
