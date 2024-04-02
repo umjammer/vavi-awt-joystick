@@ -4,9 +4,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import net.java.games.input.usb.UsagePage;
 import org.hid4java.HidDevice;
-import org.hid4java.HidManager;
-import org.hid4java.HidServices;
-import org.hid4java.HidServicesSpecification;
+import org.hid4java.HidDevices;
+import org.hid4java.HidSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,18 +47,18 @@ public class Example2 {
 
         HidDevice dev = null;
 
-        HidServicesSpecification hidServicesSpecification = new HidServicesSpecification();
+        HidSpecification hidServicesSpecification = new HidSpecification();
         // Use the v0.7.0 manual start feature to get immediate attach events
         hidServicesSpecification.setAutoStart(false);
 
         // Get HID services using custom specification
-        HidServices hidServices = HidManager.getHidServices(hidServicesSpecification);
+        HidDevices hidDevices = new HidDevices(hidServicesSpecification);
 
-        hidServices.start();
+        hidDevices.start();
 
         // Provide a list of attached devices
 Debug.println("scanning");
-        for (HidDevice hidDevice : hidServices.getAttachedHidDevices()) {
+        for (HidDevice hidDevice : hidDevices.getHidDevices()) {
             System.out.println(hidDevice.getManufacturer() + "/" + hidDevice.getProduct() + " ... usagePage: " + UsagePage.map(hidDevice.getUsagePage()));
             if (hidDevice.getVendorId() == vendorId && hidDevice.getProductId() == productId) {
                 dev = hidDevice;

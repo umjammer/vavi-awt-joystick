@@ -10,9 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.hid4java.HidDevice;
-import org.hid4java.HidManager;
-import org.hid4java.HidServices;
-import org.hid4java.HidServicesSpecification;
+import org.hid4java.HidDevices;
+import org.hid4java.HidSpecification;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,7 +45,7 @@ public class UsbTest {
     int vendorId;
     int productId;
 
-    HidServices hidServices;
+    HidDevices hidDevices;
 
     @BeforeEach
     void setup() throws Exception {
@@ -57,27 +56,27 @@ public class UsbTest {
             productId = Integer.decode(pid);
         }
 
-        HidServicesSpecification hidServicesSpecification = new HidServicesSpecification();
+        HidSpecification hidServicesSpecification = new HidSpecification();
         // Use the v0.7.0 manual start feature to get immediate attach events
         hidServicesSpecification.setAutoStart(false);
         hidServicesSpecification.setAutoShutdown(false);
 
         // Get HID services using custom specification
-        hidServices = HidManager.getHidServices(hidServicesSpecification);
+        hidDevices = new HidDevices(hidServicesSpecification);
 
         // Manually start the services to get attachment event
-        hidServices.start();
+        hidDevices.start();
     }
 
     @AfterEach
     void teardown() throws Exception {
-        hidServices.shutdown();
+        hidDevices.shutdown();
     }
 
     @Test
     @DisplayName("dump REPORT descriptor by UsbUtil")
     void test3() throws Exception {
-        HidDevice dualShock4 = hidServices.getHidDevice(vendorId, productId, null);
+        HidDevice dualShock4 = hidDevices.getHidDevice(vendorId, productId, null);
 
         byte[] d = new byte[4096];
         int r = dualShock4.getReportDescriptor(d);
@@ -89,7 +88,7 @@ Debug.println("r: " + r);
     @Test
     @DisplayName("dump input descriptor by UsbUtil")
     void test4() throws Exception {
-        HidDevice device = hidServices.getHidDevice(vendorId, productId, null);
+        HidDevice device = hidDevices.getHidDevice(vendorId, productId, null);
 
         byte[] d = new byte[512];
         int r = device.getInputDescriptor(d, 2);

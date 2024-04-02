@@ -104,7 +104,7 @@
     <dependency>
       <groupId>com.github.umjammer</groupId> <!-- org.hid4java / com.github.umjammer -->
       <artifactId>hid4java</artifactId>
-      <version>0.14.9v</version>
+      <version>0.14.10v</version>
     </dependency>
 
     <dependency>
