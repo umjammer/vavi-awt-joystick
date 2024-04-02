@@ -11,17 +11,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.logging.Level;
 
 import com.sun.jna.Callback;
 import net.java.games.input.Component;
+import net.java.games.input.Component.Identifier;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import net.java.games.input.ControllerListenerSupport;
 import net.java.games.input.DeviceSupportPlugin;
 import net.java.games.input.Rumbler;
-import net.java.games.input.usb.HidControllerEnvironment;
 import org.rococoa.Foundation;
 import org.rococoa.ObjCObject;
 import org.rococoa.Rococoa;
@@ -32,7 +31,6 @@ import org.rococoa.cocoa.gamecontroller.GCController;
 import org.rococoa.cocoa.gamecontroller.GCControllerAxisInput;
 import org.rococoa.cocoa.gamecontroller.GCControllerButtonInput;
 import org.rococoa.cocoa.gamecontroller.GCControllerDirectionPad;
-import org.rococoa.cocoa.gamecontroller.GCControllerElement;
 import org.rococoa.cocoa.gamecontroller.GCControllerTouchpad;
 import vavi.util.Debug;
 
@@ -99,9 +97,11 @@ Debug.println(Level.FINE, "devices: " + GCController.controllers().size());
         List<Rumbler> rumblers = new ArrayList<>();
 
         // extra elements by plugin
+        DeviceSupportPlugin supportPlugin = null;
         for (DeviceSupportPlugin plugin : DeviceSupportPlugin.getPlugins()) {
 //Debug.println(Level.FINER, "plugin: " + plugin + ", " + plugin.match(device));
             if (plugin.match(device)) {
+                supportPlugin = plugin;
 //Debug.println(Level.FINE, "@@@ plugin for extra: " + plugin.getClass().getName());
                 components.addAll(plugin.getExtraComponents(device));
                 children.addAll(plugin.getExtraChildControllers(device));
@@ -109,24 +109,35 @@ Debug.println(Level.FINE, "devices: " + GCController.controllers().size());
             }
         }
 
+        IdConvertible idConverter;
+        if (supportPlugin instanceof IdConvertible idConvertible) {
+            idConverter = idConvertible;
+        } else {
+            idConverter = s -> Identifier.Value;
+        }
+
         device.extendedGamepad().allButtons().allObjects().toList().forEach(o -> {
             GCControllerButtonInput element = Rococoa.cast(o, GCControllerButtonInput.class);
-            RococoaComponent component = new RococoaComponent(element);
+            Identifier id = idConverter.normalize(element.unmappedLocalizedName());
+            RococoaComponent component = new RococoaComponent(element, id);
             components.add(component);
         });
         device.extendedGamepad().allAxes().allObjects().toList().forEach(o -> {
             GCControllerAxisInput element = Rococoa.cast(o, GCControllerAxisInput.class);
-            RococoaComponent component = new RococoaComponent(element);
+            Identifier id = idConverter.normalize(element.unmappedLocalizedName());
+            RococoaComponent component = new RococoaComponent(element, id);
             components.add(component);
         });
         device.extendedGamepad().allDpads().allObjects().toList().forEach(o -> {
             GCControllerDirectionPad element = Rococoa.cast(o, GCControllerDirectionPad.class);
-            RococoaComponent component = new RococoaComponent(element);
+            Identifier id = idConverter.normalize(element.unmappedLocalizedName());
+            RococoaComponent component = new RococoaComponent(element, id);
             components.add(component);
         });
         device.extendedGamepad().allTouchpads().allObjects().toList().forEach(o -> {
             GCControllerTouchpad element = Rococoa.cast(o, GCControllerTouchpad.class);
-            RococoaComponent component = new RococoaComponent(element);
+            Identifier id = idConverter.normalize(element.unmappedLocalizedName());
+            RococoaComponent component = new RococoaComponent(element, id);
             components.add(component);
         });
 
