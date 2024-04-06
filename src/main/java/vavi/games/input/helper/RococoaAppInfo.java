@@ -45,6 +45,8 @@ public class RococoaAppInfo implements AppInfo {
         return a.processIdentifier().intValue();
     }
 
+    private Rectangle bounds = new Rectangle();
+
     /** takes a bit time */
     @Override
     public Rectangle bounds() {
@@ -59,7 +61,8 @@ public class RococoaAppInfo implements AppInfo {
                     int y = Integer.parseInt(rect.get(NSString.stringWithString("Y")).toString());
                     int width = Integer.parseInt(rect.get(NSString.stringWithString("Width")).toString());
                     int height = Integer.parseInt(rect.get(NSString.stringWithString("Height")).toString());
-                    return new Rectangle(x, y, width, height);
+                    bounds.setBounds(x, y, width, height);
+                    return bounds;
                 }
             }
         } catch (Exception e) {

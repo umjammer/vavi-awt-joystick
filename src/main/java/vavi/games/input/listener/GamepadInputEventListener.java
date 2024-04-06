@@ -112,6 +112,9 @@ Debug.println(Level.FINE, ">>FRONTMOST: " + o.get());
         };
     }
 
+    /** for reuse */
+    private final Event inputEvent = new Event();
+
     @Override
     public void onInput(InputEvent event) {
         GamepadListener listener = currentListener.get();
@@ -123,32 +126,31 @@ Debug.println(Level.FINE, ">>FRONTMOST: " + o.get());
             return;
         }
 
-        Event e = new Event();
         listener.before();
-        while (event.getNextEvent(e)) {
-            Component c =  e.getComponent();
+        while (event.getNextEvent(inputEvent)) {
+            Component c =  inputEvent.getComponent();
             switch (c.getName()) {
-                case "X(48)" -> listener.onX(e);
-                case "Y(49)" -> listener.onY(e);
-                case "RZ(53)" -> listener.onRZ(e);
-                case "Z(50)" -> listener.onZ(e);
-                case "HATSWITCH(57)" -> listener.onHatSwitch(e);
-                case "ButtonUsageId(1)" -> listener.onButton1(e);
-                case "ButtonUsageId(2)" -> listener.onButton2(e);
-                case "ButtonUsageId(3)" -> listener.onButton3(e);
-                case "ButtonUsageId(4)" -> listener.onButton4(e);
-                case "ButtonUsageId(5)" -> listener.onButton5(e);
-                case "ButtonUsageId(6)" -> listener.onButton6(e);
-                case "ButtonUsageId(7)" -> listener.onButton7(e);
-                case "ButtonUsageId(8)" -> listener.onButton8(e);
-                case "ButtonUsageId(9)" -> listener.onButton9(e);
-                case "ButtonUsageId(10)" -> listener.onButton10(e);
-                case "ButtonUsageId(11)" -> listener.onButton11(e);
-                case "ButtonUsageId(12)" -> listener.onButton12(e);
-                case "ButtonUsageId(13)" -> listener.onButton13(e);
-                case "ButtonUsageId(14)" -> listener.onButton14(e);
-                case "RX(51)" -> listener.onRX(e);
-                case "RY(52)" -> listener.onRY(e);
+                case "X(48)" -> listener.onX(inputEvent);
+                case "Y(49)" -> listener.onY(inputEvent);
+                case "RZ(53)" -> listener.onRZ(inputEvent);
+                case "Z(50)" -> listener.onZ(inputEvent);
+                case "HATSWITCH(57)" -> listener.onHatSwitch(inputEvent);
+                case "ButtonUsageId(1)" -> listener.onButton1(inputEvent);
+                case "ButtonUsageId(2)" -> listener.onButton2(inputEvent);
+                case "ButtonUsageId(3)" -> listener.onButton3(inputEvent);
+                case "ButtonUsageId(4)" -> listener.onButton4(inputEvent);
+                case "ButtonUsageId(5)" -> listener.onButton5(inputEvent);
+                case "ButtonUsageId(6)" -> listener.onButton6(inputEvent);
+                case "ButtonUsageId(7)" -> listener.onButton7(inputEvent);
+                case "ButtonUsageId(8)" -> listener.onButton8(inputEvent);
+                case "ButtonUsageId(9)" -> listener.onButton9(inputEvent);
+                case "ButtonUsageId(10)" -> listener.onButton10(inputEvent);
+                case "ButtonUsageId(11)" -> listener.onButton11(inputEvent);
+                case "ButtonUsageId(12)" -> listener.onButton12(inputEvent);
+                case "ButtonUsageId(13)" -> listener.onButton13(inputEvent);
+                case "ButtonUsageId(14)" -> listener.onButton14(inputEvent);
+                case "RX(51)" -> listener.onRX(inputEvent);
+                case "RY(52)" -> listener.onRY(inputEvent);
             }
         }
         listener.after();
