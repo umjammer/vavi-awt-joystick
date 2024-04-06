@@ -12,6 +12,7 @@ import java.awt.Point;
 import com.sun.jna.Pointer;
 import org.rococoa.cocoa.corefoundation.CoreFoundation;
 import org.rococoa.cocoa.coregraphics.CGPoint;
+import org.rococoa.cocoa.coregraphics.CGPoint.CGMutableFloat;
 
 import static org.rococoa.carbon.CarbonCoreLibrary.kVK_Command;
 import static org.rococoa.carbon.CarbonCoreLibrary.kVK_Control;
@@ -51,7 +52,7 @@ public class RococaRobot {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> CoreFoundation.library.CFRelease(src)));
 
         Point p = MouseInfo.getPointerInfo().getLocation();
-        prev = new CGPoint(p.x, p.y);
+        prev = new CGPoint(new CGMutableFloat(p.x), new CGMutableFloat(p.y));
     }
 
     /** */
@@ -152,7 +153,7 @@ public class RococaRobot {
     public void mouseMove(int x, int y) {
         int dx = x - prev.x.intValue();
         int dy = y - prev.y.intValue();
-        prev = new CGPoint(x, y);
+        prev.update(x, y);
         Pointer /* CGEventRef */ event = library.CGEventCreateMouseEvent(
                 null, kCGEventMouseMoved,
                 prev,
@@ -167,7 +168,7 @@ public class RococaRobot {
 
     /** Moves mouse pointer to given screen coordinates w/o moving motion means like teleportation. */
     public void mouseMoveOnlyLocation(int x, int y) {
-        prev = new CGPoint(x, y);
+        prev.update(x, y);
         Pointer /* CGEventRef */ event = library.CGEventCreateMouseEvent(
                 null, kCGEventMouseMoved,
                 prev,
@@ -212,7 +213,7 @@ public class RococaRobot {
      * @param buttons kCGMouseButtonLeft, kCGMouseButtonRight
      */
     public void mousePressWithCoordinate(int buttons, int x, int y) {
-        prev = new CGPoint(x, y);
+        prev.update(x, y);
         int[] events = {kCGEventLeftMouseDown, kCGEventRightMouseDown};
         Pointer /* CGEventRef */ event = library.CGEventCreateMouseEvent(
                 null, events[buttons],
@@ -242,7 +243,7 @@ public class RococaRobot {
      * @param buttons kCGMouseButtonLeft, kCGMouseButtonRight
      */
     public void mouseReleaseWithCoordinate(int buttons, int x, int y) {
-        prev = new CGPoint(x, y);
+        prev.update(x, y);
         int[] events = {kCGEventLeftMouseUp, kCGEventRightMouseUp};
         Pointer /* CGEventRef */ event = library.CGEventCreateMouseEvent(
                 null, events[buttons],
