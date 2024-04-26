@@ -6,16 +6,21 @@
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Properties;
 
+import com.sun.tools.attach.VirtualMachine;
 import net.java.games.input.Controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.lwjgl.glfw.GLFW;
 import org.rococoa.Rococoa;
 import org.rococoa.cocoa.foundation.NSArray;
 import vavi.awt.joystick.usb.UsbEnvironmentPlugin;
+import vavi.games.input.helper.JavaVMAppInfo;
+import vavi.games.input.listener.MinecraftListener;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
@@ -93,5 +98,16 @@ Debug.printf("reverseBytes: %08x", b);
     void test7() throws Exception {
         NSArray array = Rococoa.toNSArray(library.CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID).getPointer());
 Debug.println(array.get(0).getClass());
+    }
+
+    @Test
+    @EnabledIfSystemProperty(named = "vavi.test", matches = "ide")
+    public void test8() throws Exception {
+        VirtualMachine.list().forEach(System.err::println);
+
+        Properties props = new Properties();
+        props.load(MinecraftListener.class.getResourceAsStream("/minecraft.properties"));
+        String[] mcLaunchers = props.stringPropertyNames().toArray(String[]::new);
+Debug.println(JavaVMAppInfo.getPidByMainClassName(mcLaunchers));
     }
 }

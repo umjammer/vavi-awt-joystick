@@ -8,9 +8,11 @@ package vavi.games.input.helper;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.logging.Level;
 
 import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
+import vavi.util.Debug;
 
 
 /**
@@ -28,6 +30,7 @@ public class JavaVMAppInfo {
     public static int getPidByMainClassName(String[] mains) {
         for (VirtualMachineDescriptor descriptor : VirtualMachine.list()) {
             if (Arrays.asList(mains).contains(descriptor.displayName())) {
+Debug.println(Level.FINE, descriptor);
                 return Integer.decode(descriptor.id());
             }
         }
