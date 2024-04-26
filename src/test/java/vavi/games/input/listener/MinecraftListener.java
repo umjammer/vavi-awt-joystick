@@ -11,7 +11,9 @@ import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.util.NoSuchElementException;
+import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
@@ -54,12 +56,17 @@ import static vavi.games.input.helper.JavaVMAppInfo.getPidByMainClassName;
 public class MinecraftListener extends GamepadAdapter {
 
     /** minecraft launchers descriptor#dusplayName */
-    private static final String[] mcLaunchers = {
-            "net.minecraft.client.main.Main", // mc launcher -> original
-            "net.fabricmc.loader.impl.launch.knot.KnotClient", // mc launcher -> fabric
-            "org.prismlauncher.EntryPoint" // prism launcher
-    };
+    private static final String[] mcLaunchers;
 
+    static {
+        try {
+            Properties props = new Properties();
+            props.load(MinecraftListener.class.getResourceAsStream("/minecraft.properties"));
+            mcLaunchers = props.stringPropertyNames().toArray(String[]::new);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
     @Override
     public boolean match(AppInfo a) {
         int pid;
