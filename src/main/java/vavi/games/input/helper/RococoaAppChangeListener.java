@@ -31,14 +31,14 @@ public abstract class RococoaAppChangeListener implements AppChangeListener {
         public void applicationWasActivated(NSNotification notification) {
             NSWorkspace workspace = Rococoa.cast(notification.object(), NSWorkspace.class);
             NSRunningApplication a = workspace.frontmostApplication();
-//Debug.println("applicationWasActivated: " + a.bundleIdentifier());
+//logger.log(Level.TRACE, "applicationWasActivated: " + a.bundleIdentifier());
             onAppChanged(new RococoaAppInfo(a));
         }
 
         public void applicationWasDeactivated(NSNotification notification) {
             NSWorkspace workspace = Rococoa.cast(notification.object(), NSWorkspace.class);
             NSRunningApplication a = workspace.frontmostApplication();
-//Debug.println("applicationWasDeactivated: " + a.bundleIdentifier());
+//logger.log(Level.TRACE, "applicationWasDeactivated: " + a.bundleIdentifier());
             onAppChanged(new RococoaAppInfo(a));
         }
     }

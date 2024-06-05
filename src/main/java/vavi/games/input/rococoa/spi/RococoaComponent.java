@@ -45,7 +45,7 @@ public class RococoaComponent extends PollingComponent implements WrappedCompone
 
     @Override
     protected float poll() throws IOException {
-//Debug.println(element + ", " + getIdentifier().getName());
+//logger.log(Level.TRACE, element + ", " + getIdentifier().getName());
         if (element instanceof GCControllerDirectionPad directionPad) {
             return 0; // TODO
         } else if (element instanceof GCControllerButtonInput buttonInput) {

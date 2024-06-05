@@ -6,6 +6,8 @@
 
 package vavi.awt.joystick.usb;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.List;
 import javax.usb.UsbDevice;
 import javax.usb.UsbDeviceDescriptor;
@@ -19,6 +21,8 @@ import net.java.games.input.usb.HidController;
 import net.java.games.input.usb.HidControllerEnvironment;
 import vavi.util.Debug;
 
+import static java.lang.System.getLogger;
+
 
 /**
  * The USB Input device.
@@ -27,6 +31,8 @@ import vavi.util.Debug;
  * @version 0.00 230919 nsano initial version <br>
  */
 public final class UsbEnvironmentPlugin extends ControllerListenerSupport implements HidControllerEnvironment {
+
+    private static final Logger logger = getLogger(UsbEnvironmentPlugin.class.getName());
 
     /** */
     public UsbEnvironmentPlugin() {
@@ -38,7 +44,7 @@ public final class UsbEnvironmentPlugin extends ControllerListenerSupport implem
 
 
         } catch (UsbException e) {
-            Debug.printStackTrace(e);
+            logger.log(Level.ERROR, e.getMessage(), e);
         }
     }
 
@@ -74,7 +80,7 @@ public final class UsbEnvironmentPlugin extends ControllerListenerSupport implem
                 if (r != null) return r;
             } else {
                 UsbDeviceDescriptor desc = device.getUsbDeviceDescriptor();
-Debug.printf("%1$d, [%2$d,0x%2$x], %3$d, [%4$d,0x%4$x]%n", desc.idVendor(), mid, desc.idProduct(), pid);
+logger.log(Level.DEBUG, "%1$d, [%2$d,0x%2$x], %3$d, [%4$d,0x%4$x]%n", desc.idVendor(), mid, desc.idProduct(), pid);
                 if (desc.idVendor() == mid && desc.idProduct() == pid) return device;
             }
         }
@@ -92,5 +98,3 @@ Debug.printf("%1$d, [%2$d,0x%2$x], %3$d, [%4$d,0x%4$x]%n", desc.idVendor(), mid,
         throw new IllegalArgumentException("no device (mid=" + mid + ",pid=" + pid + ")");
     }
 }
-
-/* */

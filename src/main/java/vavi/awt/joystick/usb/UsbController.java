@@ -8,6 +8,8 @@ package vavi.awt.joystick.usb;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import javax.usb.UsbConfiguration;
@@ -23,7 +25,8 @@ import net.java.games.input.Event;
 import net.java.games.input.PollingController;
 import net.java.games.input.Rumbler;
 import net.java.games.input.usb.HidController;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -33,6 +36,8 @@ import vavi.util.Debug;
  * @version 0.00 2023-09-18 nsano initial version <br>
  */
 public abstract class UsbController extends PollingController implements HidController {
+
+    private static final Logger logger = getLogger(UsbController.class.getName());
 
     private static String getMString(UsbDevice device, int mid, int pid) {
         try {
@@ -62,15 +67,15 @@ public abstract class UsbController extends PollingController implements HidCont
         usbInterface = (UsbInterface) configuration.getUsbInterfaces().get(0);
 
         UsbEndpoint endpointOut, endpointIn;
-Debug.println("endPoints: " + usbInterface.getUsbEndpoints().size());
+logger.log(Level.DEBUG, "endPoints: " + usbInterface.getUsbEndpoints().size());
         for (int i = 0; i < usbInterface.getUsbEndpoints().size(); i++) {
             byte endpointAddr = ((UsbEndpoint) (usbInterface.getUsbEndpoints().get(i))).getUsbEndpointDescriptor().bEndpointAddress();
             if (((endpointAddr & 0x80) == 0x80)) {
                 endpointIn = (UsbEndpoint) (usbInterface.getUsbEndpoints().get(i));
-Debug.println("IN: " + endpointIn);
+logger.log(Level.DEBUG, "IN: " + endpointIn);
             } else if ((endpointAddr & 0x80) == 0x00) {
                 endpointOut = (UsbEndpoint) (usbInterface.getUsbEndpoints().get(i));
-Debug.println("OUT: " + endpointOut);
+logger.log(Level.DEBUG, "OUT: " + endpointOut);
             }
         }
         // 0x02 : OUT, 0x081 IN

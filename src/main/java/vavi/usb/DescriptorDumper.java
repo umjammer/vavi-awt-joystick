@@ -242,12 +242,12 @@ public class DescriptorDumper {
             if (strings[count].isEmpty()) {
                 if (type == DescType.DESC_BMCONTROL_1) {
                     if (((bmControls >> count) & 0x1) != 0) {
-                        System.out.printf(String.format("%%%ds%%s Control%n", indent * 2), "", strings[count]);
+                        System.out.printf("%%%ds%%s Control%n".formatted(indent * 2), "", strings[count]);
                     }
                 } else {
                     control = (int) ((bmControls >> (count * 2)) & 0x3);
                     if (control != 0) {
-                        System.out.printf(String.format("%%%ds%%s Control (%%s)\n", indent * 2),
+                        System.out.printf("%%%ds%%s Control (%%s)\n".formatted(indent * 2),
                                 "",
                                 strings[count],
                                 setting[control - 1]);
@@ -348,7 +348,7 @@ public class DescriptorDumper {
             int offset,
             int bytes) {
         int align = (width >= bytes * 2) ? width - bytes * 2 : 0;
-        System.out.printf(String.format(" %%%ds0x%%0%dx", align, bytes * 2), "", getNBytes(buf, offset, bytes));
+        System.out.printf(" %%%ds0x%%0%dx".formatted(align, bytes * 2), "", getNBytes(buf, offset, bytes));
     }
 
     /**
@@ -368,7 +368,7 @@ public class DescriptorDumper {
             int bytes) {
         if (bytes == 1) {
             // Render small numbers as decimal
-            System.out.printf(String.format("   %%%dd", width), buf[offset]);
+            System.out.printf("   %%%dd".formatted(width), buf[offset]);
         } else {
             // Otherwise render as hexadecimals
             renderHex(buf, width, offset, bytes);
@@ -456,7 +456,7 @@ public class DescriptorDumper {
                 if (((value >> i) & 0x1) == 0) {
                     continue;
                 }
-                System.out.printf(String.format("%%%ds%%s%n", (indent + 1) * 2), "", current.union.bitmap_strings.strings[i]);
+                System.out.printf("%%%ds%%s%n".formatted((indent + 1) * 2), "", current.union.bitmap_strings.strings[i]);
             }
             break;
         }
@@ -526,7 +526,7 @@ public class DescriptorDumper {
         }
 
         if (size == 0) {
-            throw new IllegalStateException(String.format("Bad descriptor definition; '%s' field has zero size.", entry.field));
+            throw new IllegalStateException("Bad descriptor definition; '%s' field has zero size.".formatted(entry.field));
         }
 
         return size;
@@ -648,10 +648,10 @@ public class DescriptorDumper {
             int needed_chars = field_len -
                     get_char_count_for_array_index(entries) -
                     current.field.length();
-            System.out.printf(String.format("%%%ds%%s(%%d)%%%ds", indent * 2, needed_chars),
+            System.out.printf("%%%ds%%s(%%d)%%%ds".formatted(indent * 2, needed_chars),
                     "", current.field, entry, "");
         } else {
-            System.out.printf(String.format("%%%ds%%-%ds", indent * 2, field_len),
+            System.out.printf("%%%ds%%-%ds".formatted(indent * 2, field_len),
                     "", current.field);
         }
     }
@@ -705,7 +705,7 @@ public class DescriptorDumper {
             for (entry = 0; entry < entries; entry++) {
                 // Check there's enough data in buf for this entry.
                 if (offset + current_size > buf_len) {
-                    System.out.printf(String.format("%%%dsWarning: Length insufficient for descriptor type.\n", (indent - 1) * 2), "");
+                    System.out.printf("%%%dsWarning: Length insufficient for descriptor type.\n".formatted((indent - 1) * 2), "");
                     for (int i = offset; i < buf_len; i++) {
                         System.out.printf("%02x ", buf[i]);
                     }
@@ -734,9 +734,9 @@ public class DescriptorDumper {
 
         // Check for junk at end of descriptor.
         if (offset < buf_len) {
-            System.out.printf(String.format("%%%dsWarning: Junk at end of descriptor (%%d bytes):\n", (indent - 1) * 2),
+            System.out.printf("%%%dsWarning: Junk at end of descriptor (%%d bytes):\n".formatted((indent - 1) * 2),
                     "", buf_len - offset);
-            System.out.printf(String.format("%%%ds", indent * 2), "");
+            System.out.printf("%%%ds".formatted(indent * 2), "");
             for (int i = offset; i < buf_len; i++) {
                 System.out.printf("%02x ", buf[i]);
             }

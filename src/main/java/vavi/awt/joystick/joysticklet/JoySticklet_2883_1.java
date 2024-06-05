@@ -188,8 +188,8 @@ public class JoySticklet_2883_1 extends Joysticklet {
 
         Event ev = new Event();
         controller.addInputEventListener(e -> {
-//Debug.printf("%04x%n", ev.buttons);
-//Debug.println(StringUtil.toBits(ev.buttons));
+//logger.log(Level.TRACE, "%04x%n", ev.buttons);
+//logger.log(Level.TRACE, StringUtil.toBits(ev.buttons));
             while (e.getNextEvent(ev)) {
                 if (ev.getComponent().getIdentifier() == Component.Identifier.Button._0)
                     images[0].panel.setVisible(ev.getValue() != 0); // △
@@ -258,5 +258,3 @@ public class JoySticklet_2883_1 extends Joysticklet {
         });
     }
 }
-
-/* */

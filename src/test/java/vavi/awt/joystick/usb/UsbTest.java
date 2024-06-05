@@ -17,6 +17,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
+
 import vavi.usb.UsbUtil;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
@@ -29,6 +32,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-09-20 nsano initial version <br>
  */
+@EnabledOnOs(OS.WINDOWS)
 @EnabledIf("localPropertiesExists")
 @PropsEntity(url = "file:local.properties")
 public class UsbTest {

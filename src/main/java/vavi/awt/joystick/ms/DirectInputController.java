@@ -7,9 +7,10 @@
 package vavi.awt.joystick.ms;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.logging.Level;
 
 import com.ms.directX.DirectXConstants;
 import com.ms.directX.JoyInfo;
@@ -19,7 +20,8 @@ import net.java.games.input.Event;
 import net.java.games.input.PollingController;
 import net.java.games.input.Rumbler;
 import net.java.games.input.usb.HidController;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -29,6 +31,8 @@ import vavi.util.Debug;
  * @version 0.00 020422 nsano initial version <br>
  */
 public class DirectInputController extends PollingController implements HidController {
+
+    private static final Logger logger = getLogger(DirectInputController.class.getName());
 
     /**
      * Protected constructor for a controller containing the specified
@@ -177,9 +181,7 @@ public class DirectInputController extends PollingController implements HidContr
             backup.zPos         = joyInfo.zPos        ;
 
         } catch (Exception f) {
-Debug.printStackTrace(Level.FINE, f);
+logger.log(Level.DEBUG, f.getMessage(), f);
         }
     }
 }
-
-/* */

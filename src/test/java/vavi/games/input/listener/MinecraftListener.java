@@ -67,6 +67,7 @@ public class MinecraftListener extends GamepadAdapter {
             throw new IllegalStateException(e);
         }
     }
+
     @Override
     public boolean match(AppInfo a) {
         int pid;
@@ -175,7 +176,7 @@ public class MinecraftListener extends GamepadAdapter {
         point = MouseInfo.getPointerInfo().getLocation();
     }
 
-    // TODO (#) are from jpystick mapper, so not sure
+    // TODO (#) are from joystick mapper, so not sure
 
     /** L3 X Axis ... - 'A' 0x00 (4), + 'D' 0x02 (7) */
     @Override

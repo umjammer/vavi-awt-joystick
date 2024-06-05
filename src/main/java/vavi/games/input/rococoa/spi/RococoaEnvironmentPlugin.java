@@ -8,12 +8,13 @@ package vavi.games.input.rococoa.spi;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-
 import com.sun.jna.Callback;
+
 import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Controller;
@@ -32,7 +33,8 @@ import org.rococoa.cocoa.gamecontroller.GCControllerAxisInput;
 import org.rococoa.cocoa.gamecontroller.GCControllerButtonInput;
 import org.rococoa.cocoa.gamecontroller.GCControllerDirectionPad;
 import org.rococoa.cocoa.gamecontroller.GCControllerTouchpad;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -43,6 +45,8 @@ import vavi.util.Debug;
  */
 public final class RococoaEnvironmentPlugin extends ControllerListenerSupport implements ControllerEnvironment, Closeable {
 
+    private static final Logger logger = getLogger(RococoaEnvironmentPlugin.class.getName());
+
     /** */
     private List<RococoaController> controllers;
 
@@ -50,7 +54,7 @@ public final class RococoaEnvironmentPlugin extends ControllerListenerSupport im
 
         public void controllerDidConnect(NSNotification notification) {
             GCController controller = Rococoa.cast(notification.object(), GCController.class);
-Debug.println("controllerDidConnect: " + controller);
+logger.log(Level.DEBUG, "controllerDidConnect: " + controller);
             try {
                 attach(controller);
             } catch (IOException e) {
@@ -59,7 +63,7 @@ Debug.println("controllerDidConnect: " + controller);
 
         public void controllerDidDisconnect(NSNotification notification) {
             GCController controller = Rococoa.cast(notification.object(), GCController.class);
-Debug.println("controllerDidDisconnect");
+logger.log(Level.DEBUG, "controllerDidDisconnect");
             detach(controller);
         }
     }
@@ -70,21 +74,21 @@ Debug.println("controllerDidDisconnect");
         Selector sel1 = Foundation.selector("controllerDidConnect:");
         Selector sel2 = Foundation.selector("controllerDidDisconnect:");
 
-        NSNotificationCenter notificationCenter = NSNotificationCenter.CLASS.defaultCenter();
+        NSNotificationCenter notificationCenter = NSNotificationCenter.defaultCenter();
         notificationCenter.addObserver_selector_name_object(proxy.id(), sel1, GCController.GCControllerDidConnectNotification, null);
         notificationCenter.addObserver_selector_name_object(proxy.id(), sel2, GCController.GCControllerDidDisconnectNotification, null);
     }
 
     private void enumerate() throws IOException {
         boolean r = isSupported(); // don't touch, instantiates hidServices
-Debug.println(Level.FINE, "isSupported: " + r);
+logger.log(Level.DEBUG, "isSupported: " + r);
         controllers = new ArrayList<>();
-Debug.println(Level.FINE, "devices: " + GCController.controllers().size());
+logger.log(Level.DEBUG, "devices: " + GCController.controllers().size());
         GCController.controllers().forEach(controller -> {
             try {
                 attach(controller);
             } catch (IOException e) {
-                Debug.printStackTrace(e);
+                logger.log(Level.ERROR, e.getMessage(), e);
             }
         });
     }
@@ -99,10 +103,10 @@ Debug.println(Level.FINE, "devices: " + GCController.controllers().size());
         // extra elements by plugin
         DeviceSupportPlugin supportPlugin = null;
         for (DeviceSupportPlugin plugin : DeviceSupportPlugin.getPlugins()) {
-//Debug.println(Level.FINER, "plugin: " + plugin + ", " + plugin.match(device));
+//logger.log(Level.TRACE, "plugin: " + plugin + ", " + plugin.match(device));
             if (plugin.match(device)) {
                 supportPlugin = plugin;
-//Debug.println(Level.FINE, "@@@ plugin for extra: " + plugin.getClass().getName());
+//logger.log(Level.TRACE, "@@@ plugin for extra: " + plugin.getClass().getName());
                 components.addAll(plugin.getExtraComponents(device));
                 children.addAll(plugin.getExtraChildControllers(device));
                 rumblers.addAll(plugin.getExtraRumblers(device));
@@ -146,9 +150,9 @@ Debug.println(Level.FINE, "devices: " + GCController.controllers().size());
                 children.toArray(Controller[]::new),
                 rumblers.toArray(Rumbler[]::new));
         controllers.add(controller);
-Debug.printf(Level.FINE, "    components: %d, %s", components.size(), components);
-//Debug.printf(Level.FINE, "    children: %d", children.size());
-Debug.printf(Level.FINE, "    rumblers: %d, %s", rumblers.size(), rumblers);
+logger.log(Level.DEBUG, "    components: %d, %s", components.size(), components);
+//logger.log(Level.TRACE, "    children: %d", children.size());
+logger.log(Level.DEBUG, "    rumblers: %d, %s", rumblers.size(), rumblers);
         return controller;
     }
 
@@ -171,7 +175,7 @@ Debug.printf(Level.FINE, "    rumblers: %d, %s", rumblers.size(), rumblers);
                 enumerate();
                 startListening();
             } catch (IOException e) {
-Debug.printStackTrace(e);
+logger.log(Level.ERROR, e.getMessage(), e);
                 return new RococoaController[0];
             }
         }

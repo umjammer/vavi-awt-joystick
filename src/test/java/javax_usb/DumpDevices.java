@@ -21,7 +21,7 @@ import javax.usb.UsbServices;
 /**
  * Dumps all devices by using the javax-javax_usb API.
  *
- * ⚠⚠⚠ 'javax.usb.properties' must be contained in classpath ⚠⚠⚠
+ * ⚠️⚠️⚠️ 'javax.usb.properties' must be contained in classpath ⚠️⚠️⚠️
  *
  * @author Klaus Reimer <k@ailis.de>
  */

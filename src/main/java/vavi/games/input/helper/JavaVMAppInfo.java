@@ -6,13 +6,14 @@
 
 package vavi.games.input.helper;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
-
 import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -23,6 +24,8 @@ import vavi.util.Debug;
  */
 public class JavaVMAppInfo {
 
+    private static final Logger logger = getLogger(JavaVMAppInfo.class.getName());
+
     /**
      * @return pid which main class name contains one of those
      * @throws NoSuchElementException when not found.
@@ -30,7 +33,7 @@ public class JavaVMAppInfo {
     public static int getPidByMainClassName(String[] mains) {
         for (VirtualMachineDescriptor descriptor : VirtualMachine.list()) {
             if (Arrays.asList(mains).contains(descriptor.displayName())) {
-Debug.println(Level.FINE, descriptor);
+logger.log(Level.DEBUG, descriptor);
                 return Integer.decode(descriptor.id());
             }
         }
