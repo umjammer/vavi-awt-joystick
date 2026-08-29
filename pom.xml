@@ -25,7 +25,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version>
+        <version>3.12.1</version>
         <configuration>
           <release>17</release>
         </configuration>
@@ -33,7 +33,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.2.2</version>
+        <version>3.2.5</version>
         <configuration>
           <argLine>
             -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
@@ -57,7 +57,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.10.2</version>
+        <version>6.1.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -75,14 +75,25 @@
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
-      <version>1.1.12</version>
+      <version>1.1.20</version>
     </dependency>
 
     <dependency>
       <groupId>org.usb4java</groupId>
       <artifactId>usb4java-javax</artifactId>
       <version>1.3.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+<dependency>
+  <groupId>org.apache.commons</groupId>
+  <artifactId>commons-lang3</artifactId>
+  <version>3.18.0</version>
+</dependency>
     <dependency> <!-- usb4java not contains native library for darwin-aarch64 -->
       <groupId>io.github.dsheirer</groupId>
       <artifactId>libusb4java-darwin-aarch64</artifactId>
@@ -92,13 +103,13 @@
     <dependency>
       <groupId>com.github.umjammer.rococoa</groupId> <!-- org.rococoa / com.github.umjammer.rococoa -->
       <artifactId>rococoa-contrib</artifactId>
-      <version>0.8.13</version>
+      <version>0.8.15</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.umjammer.jinput</groupId> <!-- net.java.jinput / com.github.umjammer.jinput -->
       <artifactId>coreapi</artifactId>
-      <version>2.0.19v</version>
+      <version>2.0.20v</version>
     </dependency>
 
     <dependency>
@@ -141,7 +152,7 @@
     <dependency>
       <groupId>com.formdev</groupId>
       <artifactId>flatlaf</artifactId>
-      <version>3.4.1</version>
+      <version>3.5</version>
       <scope>runtime</scope>
     </dependency>
 
@@ -162,9 +173,9 @@
     </dependency>
 
     <dependency>
-      <groupId>com.github.umjammer</groupId>
+      <groupId>com.github.umjammer</groupId> <!-- com.github.umjammer -->
       <artifactId>vavi-awt</artifactId>
-      <version>1.0.7</version>
+      <version>1.0.11</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

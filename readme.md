@@ -72,6 +72,7 @@
    * https://yukkurigames.com/enjoyable/
  * cui
    * https://github.com/JetBrains/jediterm
+ * https://asamomiji.jp/contents/implement-gamepad-function-on-jr100-emulator-version2
 
 ### Tech Know
 
