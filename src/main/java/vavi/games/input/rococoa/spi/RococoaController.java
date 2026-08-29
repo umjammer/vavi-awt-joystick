@@ -88,7 +88,7 @@ public class RococoaController extends PollingController {
             event.set(component, ((RococoaComponent) component).poll(), nanos);
             deque.offer(event);
         }
-//Debug.println("deque: " + deque.size());
+//logger.log(Level.TRACE, "deque: " + deque.size());
     }
 
     @Override

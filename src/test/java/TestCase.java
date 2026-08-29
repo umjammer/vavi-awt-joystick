@@ -7,14 +7,9 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
-
 import com.sun.tools.attach.VirtualMachine;
+
 import net.java.games.input.Controller;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIf;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.lwjgl.glfw.GLFW;
 import org.rococoa.Rococoa;
 import org.rococoa.cocoa.foundation.NSArray;
@@ -25,6 +20,13 @@ import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.rococoa.cocoa.coregraphics.CoreGraphicsLibrary.kCGNullWindowID;
 import static org.rococoa.cocoa.coregraphics.CoreGraphicsLibrary.kCGWindowListOptionOnScreenOnly;
@@ -32,14 +34,14 @@ import static org.rococoa.cocoa.coregraphics.CoreGraphicsLibrary.library;
 
 
 /**
- * Test1.
+ * TestCase.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-05-09 nsano initial version <br>
  */
 @EnabledIf("localPropertiesExists")
 @PropsEntity(url = "file:local.properties")
-public class Test1 {
+public class TestCase {
 
     static boolean localPropertiesExists() {
         return Files.exists(Paths.get("local.properties"));
@@ -101,6 +103,7 @@ Debug.println(array.get(0).getClass());
     }
 
     @Test
+    @DisplayName("list java instances")
     @EnabledIfSystemProperty(named = "vavi.test", matches = "ide")
     public void test8() throws Exception {
         VirtualMachine.list().forEach(System.err::println);

@@ -1614,16 +1614,16 @@ public class UsbSpec {
     static void initHash(GenericStrTable[] srcs, Map<Integer, GenericStrTable> dests) {
         for (GenericStrTable src : srcs) {
             dests.putIfAbsent(hashnum(src.num), src);
-//Debug.printf("HASH: %02x -> %02x: %s%n", src.num, hashnum(src.num), dests.get(hashnum(src.num)).name);
+//logger.log(Level.TRACE, "HASH: %02x -> %02x: %s%n", src.num, hashnum(src.num), dests.get(hashnum(src.num)).name);
         }
     }
 
     static {
-//Debug.printf("HASH: reports_hash -------------------------------------------");
+//logger.log(Level.TRACE, "HASH: reports_hash -------------------------------------------");
         initHash(reports, reports_hash);
-//Debug.printf("HASH: huts_hash -------------------------------------------");
+//logger.log(Level.TRACE, "HASH: huts_hash -------------------------------------------");
         initHash(huts, huts_hash);
-//Debug.printf("HASH: hutus_hash -------------------------------------------");
+//logger.log(Level.TRACE, "HASH: hutus_hash -------------------------------------------");
         initHash(hutus, hutus_hash);
     }
 }

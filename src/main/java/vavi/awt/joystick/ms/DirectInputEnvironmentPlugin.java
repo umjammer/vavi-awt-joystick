@@ -6,6 +6,8 @@
 
 package vavi.awt.joystick.ms;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,8 @@ import net.java.games.input.ControllerListenerSupport;
 import net.java.games.input.Rumbler;
 import net.java.games.input.usb.HidController;
 import net.java.games.input.usb.HidControllerEnvironment;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -28,6 +31,8 @@ import vavi.util.Debug;
  * @version 0.00 2023-09-18 nsano initial version <br>
  */
 public final class DirectInputEnvironmentPlugin extends ControllerListenerSupport implements HidControllerEnvironment {
+
+    private static final Logger logger = getLogger(DirectInputEnvironmentPlugin.class.getName());
 
     /** */
     private final List<DirectInputController> controllers = new ArrayList<>();
@@ -157,11 +162,11 @@ public final class DirectInputEnvironmentPlugin extends ControllerListenerSuppor
 
                         controllers.add(device);
                     } catch (Exception e) {
-Debug.printStackTrace(e);
+logger.log(Level.ERROR, e.getMessage(), e);
                     }
                 }
             } catch (Exception e) {
-Debug.printStackTrace(e);
+logger.log(Level.ERROR, e.getMessage(), e);
             }
         }
     }

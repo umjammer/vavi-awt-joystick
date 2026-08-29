@@ -6,12 +6,13 @@
 
 package vavi.games.input.rococoa.spi.plugin;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier;
@@ -23,8 +24,8 @@ import net.java.games.input.plugin.DualShock4PluginBase;
 import org.rococoa.cocoa.gamecontroller.GCController;
 import vavi.games.input.rococoa.spi.IdConvertible;
 import vavi.games.input.rococoa.spi.RococoaRumbler;
-import vavi.util.Debug;
 
+import static java.lang.System.getLogger;
 import static net.java.games.input.Component.Identifier.Value;
 
 
@@ -37,11 +38,13 @@ import static net.java.games.input.Component.Identifier.Value;
  */
 public class DualShock4Plugin extends DualShock4PluginBase implements IdConvertible {
 
+    private static final Logger logger = getLogger(DualShock4Plugin.class.getName());
+
     /** @param object HidDevice */
     @Override
     public boolean match(Object object) {
         if (object instanceof GCController device) {
-Debug.println(device.extendedGamepad().description());
+logger.log(Level.DEBUG, device.extendedGamepad().description());
             return device.extendedGamepad() != null && device.extendedGamepad().description().contains("GCDualShockGamepad");
         } else {
             return false;

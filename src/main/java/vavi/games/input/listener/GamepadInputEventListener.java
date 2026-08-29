@@ -7,22 +7,24 @@
 package vavi.games.input.listener;
 
 import java.awt.Rectangle;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
 
 import net.java.games.input.Component;
 import net.java.games.input.Event;
 import net.java.games.input.InputEvent;
 import net.java.games.input.InputEventListener;
 import vavi.games.input.helper.RococoaAppChangeListener;
-import vavi.util.Debug;
 import vavi.util.event.GenericEvent;
 import vavi.util.event.GenericListener;
 import vavi.util.event.GenericSupport;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -36,6 +38,8 @@ import vavi.util.event.GenericSupport;
  * @version 0.00 2024-03-21 nsano initial version <br>
  */
 public class GamepadInputEventListener implements InputEventListener {
+
+    private static final Logger logger = getLogger(GamepadInputEventListener.class.getName());
 
     private final List<GamepadListener> listeners = new ArrayList<>();
 
@@ -77,6 +81,8 @@ public class GamepadInputEventListener implements InputEventListener {
         void onAppChanged(AppInfo a);
     }
 
+    private final AppChangeListener appChangeListener;
+
     /** */
     public GamepadInputEventListener() {
         ServiceLoader.load(GamepadListener.class).forEach(listener -> {
@@ -84,29 +90,29 @@ public class GamepadInputEventListener implements InputEventListener {
             listener.init(context);
         });
 
-        new RococoaAppChangeListener() {
+        this.appChangeListener = new RococoaAppChangeListener() {
             /** @see "https://stackoverflow.com/a/33395422" */
             @Override public void onAppChanged(AppInfo a) {
 try {
-//Debug.println(a.bundleIdentifier() + ":" + a.processIdentifier());
+//logger.log(Level.TRACE, a.bundleIdentifier() + ":" + a.processIdentifier());
                 Optional<GamepadListener> o =  listeners.stream().filter(l -> l.match(a)).findFirst();
                 if (o.isEmpty()) {
                     if (currentListener.get() != null) {
-Debug.println(Level.FINE, ">>FRONTMOST: none");
+logger.log(Level.DEBUG, ">>FRONTMOST: none");
                         currentListener.get().deactive();
                         currentListener.set(null);
                     }
                 } else {
                     if (currentListener.get() != o.get()) {
 
-Debug.println(Level.FINE, ">>FRONTMOST: " + o.get());
+logger.log(Level.DEBUG, ">>FRONTMOST: " + o.get());
                         currentListener.set(o.get());
                         o.get().active();
                         warmupTime = System.currentTimeMillis();
                     }
                 }
 } catch (Throwable t) {
- Debug.printStackTrace(t);
+ logger.log(Level.ERROR, t.getMessage(), t);
 }
             }
         };
@@ -122,7 +128,7 @@ Debug.println(Level.FINE, ">>FRONTMOST: " + o.get());
             return;
         }
         if (System.currentTimeMillis() - warmupTime < warmup) {
-//Debug.println("warmup: " + listener);
+//logger.log(Level.TRACE, "warmup: " + listener);
             return;
         }
 

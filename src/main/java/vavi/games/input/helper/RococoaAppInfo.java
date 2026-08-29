@@ -7,15 +7,17 @@
 package vavi.games.input.helper;
 
 import java.awt.Rectangle;
-
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import com.sun.jna.platform.mac.CoreFoundation.CFArrayRef;
+
 import org.rococoa.Rococoa;
 import org.rococoa.cocoa.appkit.NSRunningApplication;
 import org.rococoa.cocoa.foundation.NSDictionary;
 import org.rococoa.cocoa.foundation.NSString;
 import vavi.games.input.listener.GamepadInputEventListener.AppInfo;
-import vavi.util.Debug;
 
+import static java.lang.System.getLogger;
 import static org.rococoa.cocoa.coregraphics.CoreGraphicsLibrary.kCGNullWindowID;
 import static org.rococoa.cocoa.coregraphics.CoreGraphicsLibrary.kCGWindowListOptionOnScreenOnly;
 import static org.rococoa.cocoa.coregraphics.CoreGraphicsLibrary.library;
@@ -28,6 +30,8 @@ import static org.rococoa.cocoa.coregraphics.CoreGraphicsLibrary.library;
  * @version 0.00 2024-03-26 nsano initial version <br>
  */
 public class RococoaAppInfo implements AppInfo {
+
+    private static final Logger logger = getLogger(RococoaAppInfo.class.getName());
 
     private final NSRunningApplication a;
 
@@ -52,7 +56,7 @@ public class RococoaAppInfo implements AppInfo {
     public Rectangle bounds() {
         try {
             CFArrayRef array = library.CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
-//Debug.println("windows: " + array.getCount());
+//logger.log(Level.TRACE, "windows: " + array.getCount());
             for (int i = 0; i < array.getCount(); i++) {
                 NSDictionary dic = Rococoa.toNSDictionary(array.getValueAtIndex(i));
                 if (Integer.parseInt(dic.get(NSString.stringWithString("kCGWindowOwnerPID")).toString()) == pid()) {
@@ -66,7 +70,7 @@ public class RococoaAppInfo implements AppInfo {
                 }
             }
         } catch (Exception e) {
-            Debug.println(e);
+            logger.log(Level.DEBUG, e);
         }
         return null;
     }

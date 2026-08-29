@@ -26,30 +26,40 @@ import vavi.games.input.listener.GamepadInputEventListener.AppChangeListener;
  */
 public abstract class RococoaAppChangeListener implements AppChangeListener {
 
+    private final WorkspaceObserver observer;
+    private final ObjCObject proxy;
+
     class WorkspaceObserver implements Callback {
 
         public void applicationWasActivated(NSNotification notification) {
             NSWorkspace workspace = Rococoa.cast(notification.object(), NSWorkspace.class);
             NSRunningApplication a = workspace.frontmostApplication();
-//Debug.println("applicationWasActivated: " + a.bundleIdentifier());
+//logger.log(Level.TRACE, "applicationWasActivated: " + a.bundleIdentifier());
             onAppChanged(new RococoaAppInfo(a));
         }
 
         public void applicationWasDeactivated(NSNotification notification) {
             NSWorkspace workspace = Rococoa.cast(notification.object(), NSWorkspace.class);
             NSRunningApplication a = workspace.frontmostApplication();
-//Debug.println("applicationWasDeactivated: " + a.bundleIdentifier());
+//logger.log(Level.TRACE, "applicationWasDeactivated: " + a.bundleIdentifier());
             onAppChanged(new RococoaAppInfo(a));
         }
     }
 
     public RococoaAppChangeListener() {
-        ObjCObject proxy = Rococoa.proxy(new WorkspaceObserver());
+        this.observer = new WorkspaceObserver();
+        this.proxy = Rococoa.proxy(observer);
         Selector sel1 = Foundation.selector("applicationWasActivated:");
         Selector sel2 = Foundation.selector("applicationWasDeactivated:");
 
-        NSNotificationCenter notificationCenter = NSWorkspace.sharedWorkspace().notificationCenter();
+        NSWorkspace workspace = NSWorkspace.sharedWorkspace();
+        NSNotificationCenter notificationCenter = workspace.notificationCenter();
         notificationCenter.addObserver_selector_name_object(proxy.id(), sel1, NSWorkspace.NSWorkspaceDidActivateApplicationNotification, null);
         notificationCenter.addObserver_selector_name_object(proxy.id(), sel2, NSWorkspace.NSWorkspaceDidDeactivateApplicationNotification, null);
+
+        NSRunningApplication frontApp = workspace.frontmostApplication();
+        if (frontApp != null) {
+            onAppChanged(new RococoaAppInfo(frontApp));
+        }
     }
 }

@@ -123,8 +123,8 @@ public class JoySticklet_1118_505 extends Joysticklet {
 
         Event ev = new Event();
         controller.addInputEventListener(e -> {
-//Debug.printf("%04x%n", ev.buttons);
-//Debug.println(StringUtil.toBits(ev.buttons));
+//logger.log(Level.TRACE, "%04x%n", ev.buttons);
+//logger.log(Level.TRACE, StringUtil.toBits(ev.buttons));
             while (e.getNextEvent(ev)) {
 //System.err.println(toHex4(ev.buttons));
 
@@ -231,5 +231,3 @@ public class JoySticklet_1118_505 extends Joysticklet {
         });
     }
 }
-
-/* */
