@@ -81,6 +81,8 @@ public class GamepadInputEventListener implements InputEventListener {
         void onAppChanged(AppInfo a);
     }
 
+    private final AppChangeListener appChangeListener;
+
     /** */
     public GamepadInputEventListener() {
         ServiceLoader.load(GamepadListener.class).forEach(listener -> {
@@ -88,7 +90,7 @@ public class GamepadInputEventListener implements InputEventListener {
             listener.init(context);
         });
 
-        new RococoaAppChangeListener() {
+        this.appChangeListener = new RococoaAppChangeListener() {
             /** @see "https://stackoverflow.com/a/33395422" */
             @Override public void onAppChanged(AppInfo a) {
 try {
