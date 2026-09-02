@@ -32,7 +32,7 @@ public class JavaVMAppInfo {
      */
     public static int getPidByMainClassName(String[] mains) {
         for (VirtualMachineDescriptor descriptor : VirtualMachine.list()) {
-            if (Arrays.asList(mains).contains(descriptor.displayName())) {
+            if (Arrays.asList(mains).contains(descriptor.displayName().split("\\s")[0])) {
 logger.log(Level.DEBUG, descriptor);
                 return Integer.decode(descriptor.id());
             }
