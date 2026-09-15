@@ -29,7 +29,7 @@
  * https://github.com/usb4java/usb4java
    * https://www.haljion.net/index.php/2013-04-12-08-15-44/2015-05-28-03-07-36/fpga-cpld/460-xilinx-license-configuration-manager
    * https://stackoverflow.com/questions/23796353/java-and-hid-communication#comment111359182_26327023
-   * ⚠ 'javax.usb.properties' must be contained in your classpath
+   * ⚠️ 'javax.usb.properties' must be contained in your classpath
  * https://github.com/gary-rowe/hid4java 🎯
    * https://github.com/libusb/hidapi `$ brew install hidapi`
    * [jna version](https://github.com/umjammer/hid4java)
