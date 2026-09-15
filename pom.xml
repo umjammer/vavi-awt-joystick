@@ -75,7 +75,7 @@
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
-      <version>1.1.20</version>
+      <version>1.1.23</version>
     </dependency>
 
     <dependency>
@@ -103,7 +103,7 @@
     <dependency>
       <groupId>com.github.umjammer.rococoa</groupId> <!-- org.rococoa / com.github.umjammer.rococoa -->
       <artifactId>rococoa-contrib</artifactId>
-      <version>0.8.15</version>
+      <version>0.8.16</version>
     </dependency>
 
     <dependency>
@@ -115,7 +115,7 @@
     <dependency>
       <groupId>com.github.umjammer</groupId> <!-- org.hid4java / com.github.umjammer -->
       <artifactId>hid4java</artifactId>
-      <version>0.14.11v</version>
+      <version>0.14.12v</version>
     </dependency>
 
     <dependency>
